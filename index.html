@@ -1,0 +1,1708 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>WiTH ARCHITECTURE — Exterior Remodel Studio</title>
+<style>
+  :root {
+    /* mood: studio (default light professional) */
+    --bg: #F5F5F3;
+    --surface: #FFFFFF;
+    --surface-2: #FBFBFA;
+    --ink: #1B1D22;
+    --ink-muted: #666A72;
+    --accent: #1E3A5F;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E7EEF3;
+    --line: #E4E3E0;
+    --line-strong: #C9C7C0;
+    --shadow: 0 1px 2px rgba(20,20,25,0.05), 0 10px 28px rgba(20,20,25,0.06);
+    --font-display: 'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR', sans-serif;
+    --font-body: 'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR', sans-serif;
+    --font-mono: 'SFMono-Regular','Consolas','Liberation Mono', monospace;
+  }
+  :root[data-mood="noir"] {
+    --bg: #121316;
+    --surface: #1A1C1F;
+    --surface-2: #202226;
+    --ink: #ECECEA;
+    --ink-muted: #9A9CA3;
+    --accent: #C9A227;
+    --accent-ink: #1F1706;
+    --accent-soft: #2E2712;
+    --line: #2A2C30;
+    --line-strong: #3C3F44;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 10px 28px rgba(0,0,0,0.45);
+  }
+  :root[data-mood="sand"] {
+    --bg: #F1ECE3;
+    --surface: #FAF7F2;
+    --surface-2: #FFFFFF;
+    --ink: #2B241C;
+    --ink-muted: #7A6F60;
+    --accent: #6B3F3F;
+    --accent-ink: #FBF3F0;
+    --accent-soft: #EDE0DD;
+    --line: #E1D8CB;
+    --line-strong: #C7BBA9;
+    --shadow: 0 1px 2px rgba(43,36,28,0.08), 0 10px 28px rgba(43,36,28,0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  a { color: var(--accent); }
+
+  .app-shell { max-width: 1360px; margin: 0 auto; padding: 40px 28px 80px; }
+
+  header.top {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 20px;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 20px; margin-bottom: 32px; flex-wrap: wrap;
+  }
+  .eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-muted); margin: 0 0 10px;
+  }
+  .version-tag {
+    color: var(--accent); border: 1px solid var(--accent); border-radius: 3px;
+    padding: 1px 6px; letter-spacing: 0.04em; font-weight: 700;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 800; font-size: 34px;
+    margin: 0 0 6px; text-wrap: balance; letter-spacing: -0.02em;
+  }
+  .lede { color: var(--ink-muted); margin: 0; max-width: 62ch; font-size: 15px; }
+
+  .header-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .mood-switch {
+    display: inline-flex; gap: 3px; background: var(--surface-2); border: 1px solid var(--line-strong);
+    border-radius: 6px; padding: 3px;
+  }
+  .mood-btn {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.03em;
+    background: transparent; border: none; color: var(--ink-muted);
+    padding: 7px 12px; border-radius: 4px; cursor: pointer;
+  }
+  .mood-btn.active { background: var(--accent); color: var(--accent-ink); }
+  .reset-btn {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
+    background: transparent; border: 1px solid var(--line-strong); color: var(--ink-muted);
+    padding: 9px 14px; border-radius: 6px; cursor: pointer; white-space: nowrap;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  main.layout {
+    display: grid; grid-template-columns: 1fr 420px; gap: 28px; align-items: start;
+  }
+  @media (max-width: 980px) {
+    main.layout { grid-template-columns: 1fr; }
+    .output-panel { position: static !important; }
+  }
+
+  .categories { display: flex; flex-direction: column; gap: 18px; }
+
+  .category {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 22px 24px; box-shadow: var(--shadow);
+  }
+  .category-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin-bottom: 6px;
+  }
+  .category-title { display: flex; align-items: center; gap: 10px; }
+  .step-index {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    color: var(--accent); background: var(--accent-soft);
+    padding: 3px 8px; border-radius: 4px; letter-spacing: 0.02em;
+  }
+  .category h2 { font-family: var(--font-display); font-size: 18px; margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+  .category .hint {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-muted);
+    border: 1px solid var(--line-strong); padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  }
+  .category .desc { color: var(--ink-muted); font-size: 13px; margin: 2px 0 14px; }
+
+  .category-note {
+    font-size: 12.5px; color: var(--ink-muted); border-left: 2px solid var(--accent);
+    padding: 8px 12px; background: var(--accent-soft); border-radius: 0 6px 6px 0; margin: 0 0 14px;
+  }
+  .category-note b { color: var(--ink); }
+
+  .subgroup { margin-bottom: 16px; }
+  .subgroup:last-child { margin-bottom: 0; }
+  .subgroup-label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .subgroup-label::before { content: ''; width: 10px; height: 1px; background: var(--accent); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    position: relative;
+    font-family: var(--font-body); font-size: 14px; color: var(--ink);
+    background: var(--surface-2); border: 1px solid var(--line-strong);
+    border-radius: 7px; padding: 9px 30px 9px 13px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+    transition: background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s;
+  }
+  .chip .en-tag {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.02em;
+    color: var(--ink-muted); text-transform: lowercase;
+  }
+  .chip:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+  .chip.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .chip.selected .en-tag { color: var(--accent-ink); opacity: 0.78; }
+  .chip.selected::after {
+    content: '✓'; position: absolute; top: 8px; right: 10px; font-size: 11px;
+    font-family: var(--font-mono); color: var(--accent-ink);
+  }
+  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .chip.chip-upload { padding: 0; cursor: default; overflow: hidden; }
+  .chip.chip-upload .chip-label {
+    padding: 9px 30px 9px 13px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  }
+  .chip.chip-upload .chip-label:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .chip.chip-upload.selected { background: var(--surface-2); color: var(--ink); border-color: var(--accent); }
+  .chip.chip-upload.selected .chip-label { background: var(--accent); color: var(--accent-ink); }
+  .chip.chip-upload.selected .chip-label .en-tag { color: var(--accent-ink); opacity: 0.78; }
+
+  .chip-dropzone {
+    border-top: 1px dashed var(--line-strong); padding: 8px 12px; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; min-height: 20px;
+  }
+  .chip-dropzone:hover { background: var(--accent-soft); }
+  .chip-dropzone.dragover { background: var(--accent-soft); border-top-color: var(--accent); }
+  .chip-dropzone.has-image { cursor: default; }
+  .chip-drop-hint {
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-muted); letter-spacing: 0.02em;
+  }
+  .chip-drop-error { font-family: var(--font-mono); font-size: 10.5px; color: var(--accent); }
+  .chip-thumb { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; flex-shrink: 0; display: block; }
+  .chip-filename {
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-muted); flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .chip-remove-btn {
+    font-family: var(--font-mono); font-size: 12px; line-height: 1; background: transparent;
+    border: 1px solid var(--line-strong); color: var(--ink-muted); border-radius: 4px;
+    width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; padding: 0;
+  }
+  .chip-remove-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* 사물 이미지 → 건물 변환 */
+  .obj-drop {
+    border: 1px dashed var(--line-strong); border-radius: 8px; padding: 10px 12px; cursor: pointer;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 36px; margin-bottom: 12px;
+  }
+  .obj-drop:hover, .obj-drop.dragover { background: var(--accent-soft); border-color: var(--accent); }
+  .obj-item { display: inline-flex; align-items: center; gap: 6px; }
+  .obj-subhead {
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); letter-spacing: 0.04em;
+    margin: 4px 0 8px;
+  }
+  .obj-desc {
+    width: 100%; font-family: var(--font-body); font-size: 14px; margin-top: 12px;
+    padding: 9px 12px; border-radius: 6px; border: 1px solid var(--line-strong);
+    background: var(--surface-2); color: var(--ink);
+  }
+  .obj-desc:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .custom-wrap { margin-top: 10px; display: none; }
+  .custom-wrap.show { display: block; }
+  .custom-wrap input {
+    width: 100%; font-family: var(--font-body); font-size: 14px;
+    padding: 9px 12px; border-radius: 6px; border: 1px solid var(--line-strong);
+    background: var(--surface-2); color: var(--ink);
+  }
+  .custom-wrap input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  textarea.extra-input {
+    width: 100%; min-height: 64px; resize: vertical; font-family: var(--font-body);
+    font-size: 14px; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line-strong);
+    background: var(--surface-2); color: var(--ink);
+  }
+  textarea.extra-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  /* Output panel */
+  .output-panel { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+  .ticket {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px 18px; box-shadow: var(--shadow);
+  }
+  .ticket h3 {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-muted); margin: 0 0 10px;
+  }
+  .ticket-pills { display: flex; flex-wrap: wrap; gap: 6px; min-height: 22px; }
+  .pill {
+    font-family: var(--font-mono); font-size: 11px; background: var(--accent-soft);
+    color: var(--ink); border-radius: 4px; padding: 4px 8px; letter-spacing: 0.01em;
+  }
+  .ticket-empty { color: var(--ink-muted); font-size: 13px; font-style: italic; }
+
+  .tabs { display: flex; gap: 6px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 5px; box-shadow: var(--shadow); }
+  .tab-btn {
+    flex: 1; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.03em;
+    background: transparent; border: none; color: var(--ink-muted); padding: 10px 6px;
+    border-radius: 7px; cursor: pointer;
+  }
+  .tab-btn.active { background: var(--accent); color: var(--accent-ink); }
+
+  .prompt-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px;
+  }
+  .prompt-card h3 { font-family: var(--font-display); font-size: 16px; margin: 0; font-weight: 700; }
+  .prompt-card h4 {
+    font-family: var(--font-display); font-size: 13px; margin: 0; font-weight: 700;
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  }
+  .prompt-card .tool-note { font-size: 12.5px; color: var(--ink-muted); margin: -6px 0 0; }
+  .prompt-output {
+    width: 100%; min-height: 220px; font-family: var(--font-mono); font-size: 12.5px;
+    line-height: 1.6; padding: 12px; border-radius: 7px; border: 1px solid var(--line-strong);
+    background: var(--surface-2); color: var(--ink); resize: vertical;
+  }
+  .prompt-output.translation { min-height: 160px; }
+  .prompt-actions { display: flex; gap: 8px; align-items: center; }
+  .copy-btn {
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.03em;
+    background: var(--accent); color: var(--accent-ink); border: none;
+    padding: 10px 16px; border-radius: 7px; cursor: pointer;
+  }
+  .copy-btn:hover { filter: brightness(1.08); }
+  .copy-btn.copied { background: var(--ink-muted); }
+  .copy-btn.secondary {
+    background: transparent; color: var(--ink-muted); border: 1px solid var(--line-strong);
+  }
+  .copy-btn.secondary:hover { border-color: var(--accent); color: var(--accent); filter: none; }
+
+  .translation-block {
+    display: flex; flex-direction: column; gap: 10px;
+    border-top: 1px dashed var(--line-strong); padding-top: 14px;
+  }
+  .translation-hint { font-family: var(--font-body); font-size: 11.5px; font-weight: 400; color: var(--ink-muted); }
+
+  .tip-box {
+    font-size: 12.5px; color: var(--ink-muted); border-left: 2px solid var(--accent);
+    padding: 8px 12px; background: var(--accent-soft); border-radius: 0 6px 6px 0;
+  }
+  .tip-box b { color: var(--ink); }
+
+  footer.note {
+    margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--ink-muted); font-family: var(--font-mono);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="top">
+    <div>
+      <p class="eyebrow">Exterior Remodel · Prompt Builder <span class="version-tag">v1.7</span></p>
+      <h1>WiTH ARCHITECTURE — Exterior Remodel Studio</h1>
+      <p class="lede">건물 용도·스타일·외장재·조경을 하나씩 선택하면, 미드저니 · 챗GPT · 제미나이용 영어 프롬프트와 한글 번역이 오른쪽에 자동으로 완성됩니다.</p>
+    </div>
+    <div class="header-controls">
+      <div class="mood-switch" id="moodSwitch" role="group" aria-label="화면 분위기 선택">
+        <button class="mood-btn" data-mood="studio" type="button">라이트</button>
+        <button class="mood-btn" data-mood="noir" type="button">다크</button>
+        <button class="mood-btn" data-mood="sand" type="button">웜</button>
+      </div>
+      <button class="reset-btn" id="resetBtn" type="button">전체 초기화</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="categories" id="categories"></div>
+
+    <aside class="output-panel">
+      <div class="ticket">
+        <h3>선택 요약</h3>
+        <div class="ticket-pills" id="ticketPills"><span class="ticket-empty">아직 선택한 항목이 없습니다</span></div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" data-tool="mj" type="button">미드저니</button>
+        <button class="tab-btn" data-tool="gpt" type="button">챗GPT</button>
+        <button class="tab-btn" data-tool="gem" type="button">제미나이</button>
+      </div>
+
+      <div class="prompt-card" id="promptCard">
+        <!-- filled by JS -->
+      </div>
+    </aside>
+  </main>
+
+  <footer class="note">모든 계산은 브라우저 안에서만 이루어지며, 선택 내용이나 사진은 어디로도 전송되지 않습니다.</footer>
+</div>
+
+<script>
+(function () {
+  // ---------- Data ----------
+  var SOURCE_OPTIONS = [
+    { v: 'bare', ko: '골조/공사 중 외부 사진', en: 'bare structural / under-construction exterior photo' },
+    { v: 'existing', ko: '기존 외부 사진', en: 'existing building exterior photo' },
+    { v: 'sketchup', ko: '스케치업(백색모델) 이미지', en: 'white, untextured SketchUp massing model image (no materials applied yet)' },
+    { v: 'plan', ko: '2D 도면(입면도·배치도)', en: '2D architectural drawing (elevation / site plan)' }
+  ];
+
+  var PLAN_MODE_OPTIONS = [
+    { v: 'full', ko: '전체 조감도', en: "a full aerial/bird's-eye view of the entire site plan" },
+    { v: 'part', ko: '특정 파사드(부분)만 지정', en: 'only the single facade/portion marked or highlighted on the drawing' }
+  ];
+
+  var BUILDING_TYPE_OPTIONS = [
+    { v: 'house', ko: '단독주택', en: 'single-family detached house' },
+    { v: 'multifamily', ko: '다가구주택', en: 'multi-family residential building' },
+    { v: 'commres', ko: '상가주택', en: 'commercial-residential building (ground-floor retail with residences above)' },
+    { v: 'townhouse', ko: '타운하우스', en: 'townhouse' },
+    { v: 'cafe', ko: '카페/상업건물', en: 'cafe / commercial building' },
+    { v: 'office', ko: '사무용 건물', en: 'office building' },
+    { v: 'warehouse', ko: '창고/공장', en: 'warehouse / factory building' },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var STYLE_OPTIONS = [
+    { v: 'modern', ko: '모던', en: 'modern' },
+    { v: 'minimal', ko: '미니멀', en: 'minimalist' },
+    { v: 'natural', ko: '내추럴·우드', en: 'natural wood-toned' },
+    { v: 'industrial', ko: '인더스트리얼', en: 'industrial' },
+    { v: 'classic', ko: '클래식', en: 'classic traditional' },
+    { v: 'mediterranean', ko: '지중해풍', en: 'Mediterranean' },
+    { v: 'farmhouse', ko: '팜하우스', en: 'modern farmhouse' },
+    { v: 'moody', ko: '다크·무디', en: 'dark and moody' },
+    { v: 'brutalist', ko: '브루탈리즘(노출콘크리트)', en: 'brutalist exposed-concrete' },
+    { v: 'scandinavian', ko: '북유럽 목조주택', en: 'Scandinavian timber house' },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var CONCEPT_OPTIONS = [
+    { v: 'mass', ko: '매스 볼륨감', en: 'bold architectural massing with a strong volumetric composition' },
+    { v: 'cantilever', ko: '캔틸레버', en: 'a cantilevered volume' },
+    { v: 'asymmetry', ko: '비대칭 구성', en: 'an asymmetrical composition' },
+    { v: 'symmetry', ko: '대칭적 구성', en: 'a symmetrical composition' },
+    { v: 'daylight', ko: '자연광 극대화(큰 창)', en: 'large windows maximizing natural light' },
+    { v: 'greenwall', ko: '그린월/조경 포인트', en: 'a green wall / accent landscaping' },
+    { v: 'curves', ko: '곡선형 파사드', en: 'a curved facade' },
+    { v: 'exposed', ko: '노출콘크리트 매스', en: 'exposed concrete massing' },
+    { v: 'piloti', ko: '필로티 구조', en: 'a piloti structure with a raised ground floor on columns' },
+    { v: 'louver', ko: '루버·차양 디테일', en: 'louver and sun-shading details' }
+  ];
+
+  var PALETTE_OPTIONS = [
+    { v: 'whitebeige', ko: '화이트·베이지', en: 'white and beige palette' },
+    { v: 'warmgray', ko: '웜그레이', en: 'warm gray palette' },
+    { v: 'woodtone', ko: '우드톤', en: 'warm wood-tone palette' },
+    { v: 'darkblack', ko: '다크·블랙', en: 'dark charcoal and black palette' },
+    { v: 'earthy', ko: '어스톤(테라코타·브라운)', en: 'earthy terracotta and brown palette' },
+    { v: 'mono', ko: '모노톤+포인트', en: 'monochrome with a single accent color' },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var WALL_MATERIAL_OPTIONS = [
+    { v: 'stucco', ko: '스타코 마감', en: 'stucco exterior finish' },
+    { v: 'brick_red', ko: '붉은 벽돌', en: 'red brick cladding' },
+    { v: 'brick_flat', ko: '평(그레이) 벽돌', en: 'flat grey brick cladding' },
+    { v: 'wood_siding', ko: '목재 사이딩', en: 'wood siding' },
+    { v: 'ceramic_siding', ko: '세라믹 사이딩', en: 'ceramic siding panel' },
+    { v: 'exposed_concrete', ko: '노출콘크리트', en: 'exposed concrete' },
+    { v: 'metal_panel', ko: '금속 패널(알루미늄)', en: 'aluminum composite metal panel' },
+    { v: 'zinc_panel', ko: '징크 패널', en: 'zinc panel cladding' },
+    { v: 'stone_cladding', ko: '스톤 클래딩(자연석)', en: 'natural stone wall cladding' },
+    { v: 'glass_curtain', ko: '유리 커튼월', en: 'glass curtain wall' },
+    { v: 'euro_plaster', ko: '유럽미장(라임플라스터)', en: 'European lime plaster finish' },
+    { v: 'brick_accent', ko: '파벽돌 포인트', en: 'brick veneer accent' }
+  ];
+
+  var ROOF_MATERIAL_OPTIONS = [
+    { v: 'shingle', ko: '아스팔트 슁글', en: 'asphalt shingle roof' },
+    { v: 'zinc_roof', ko: '징크 지붕', en: 'standing seam zinc roof' },
+    { v: 'tile_roof', ko: '기와 지붕', en: 'clay tile roof' },
+    { v: 'flat_parapet', ko: '평지붕(파라펫)', en: 'flat roof with a parapet' },
+    { v: 'metal_folded', ko: '금속 절판 지붕', en: 'folded metal plate roof' },
+    { v: 'concrete_slab', ko: '콘크리트 슬라브 지붕', en: 'exposed concrete slab roof' },
+    { v: 'green_roof', ko: '그린루프(옥상정원)', en: 'green roof with a rooftop garden' }
+  ];
+
+  var WINDOW_MATERIAL_OPTIONS = [
+    { v: 'black_system', ko: '시스템창호(블랙)', en: 'black aluminum system windows' },
+    { v: 'white_system', ko: '시스템창호(화이트)', en: 'white aluminum system windows' },
+    { v: 'wood_frame', ko: '목재 프레임 창호', en: 'wood-framed windows' },
+    { v: 'picture_window', ko: '대형 통유리창', en: 'large fixed picture windows' },
+    { v: 'folding_door', ko: '접이식 폴딩도어', en: 'folding glass doors' },
+    { v: 'steel_gate', ko: '철제 대문(모던)', en: 'a modern steel gate' },
+    { v: 'wood_gate', ko: '목재 대문', en: 'a wood gate' }
+  ];
+
+  var LIGHTING_OPTIONS = [
+    { v: 'landscape', ko: '외부 경관조명', en: 'exterior landscape lighting' },
+    { v: 'facade_line', ko: '파사드 라인조명', en: 'linear facade accent lighting' },
+    { v: 'eave_down', ko: '처마·포치 다운라이트', en: 'eave and porch downlights' },
+    { v: 'bollard', ko: '대문·진입로 볼라드조명', en: 'bollard lighting along the gate and driveway' },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var RENDER_STYLE_OPTIONS = [
+    { v: 'photoreal', ko: '실제 사진처럼', en: 'photorealistic architectural exterior photography',
+      promptEn: 'photorealistic architectural exterior photography, shot on a full-frame camera with a wide-angle lens, natural daylight and a realistic sky, sharp focus, true-to-life material textures and reflections on glass, metal, and stone — not an illustration, not a painting, not a sketch',
+      promptKo: '실제 카메라로 촬영한 것 같은 사실적인 건축 외관 사진. 광각 렌즈, 자연광과 사실적인 하늘, 유리·금속·석재의 질감과 반사가 사실적으로 표현됨 — 일러스트나 그림, 스케치가 아님' },
+    { v: 'ultraphoto', ko: '극 사실 포토이미지', en: 'ultra-realistic photograph',
+      promptEn: 'ultra-realistic professional architectural exterior photograph, a real photo and not a 3D render, shot on a full-frame mirrorless camera with a professional architectural lens, sharp across the frame, corrected vertical lines, natural color grading, physically accurate shadows and glass reflections of the real surroundings, true-to-life material textures with visible panel joints, formwork marks, mortar lines and subtle weathering, lived-in context with everyday life details such as people in casual clothing, parked cars, street signage, utility poles, potted plants and outdoor furniture, slight natural imperfections, no CGI gloss, no plastic look — not an illustration, not a painting, not a sketch',
+      promptKo: '전문 건축 사진가가 실제로 촬영한 듯한 극 사실 외관 사진 (3D 렌더가 아닌 진짜 사진). 풀프레임 미러리스 카메라와 건축용 전문 렌즈, 화면 전체가 선명하고 수직선이 바로잡힌 구도, 자연스러운 색보정, 실제 주변 풍경이 비치는 유리 반사와 물리적으로 정확한 그림자, 패널 이음새·거푸집 자국·벽돌 줄눈·미세한 풍화 자국이 보이는 실제 재질 질감, 캐주얼한 옷차림의 사람·주차된 차·간판·전봇대·화분·야외 가구 같은 생활감 있는 디테일, 약간의 자연스러운 불완전함, CG 특유의 번들거림이나 플라스틱 느낌 없음 — 일러스트나 그림, 스케치가 아님',
+      noParam: '3d render, cgi, plastic look' },
+    { v: 'model', ko: '모형 사진처럼', en: 'architectural scale model photography',
+      promptEn: 'a photograph of a physical architectural scale model / miniature diorama of the building built from foam board, basswood, and acrylic, with visible model-making seams and joints, miniature trees and landscaping, tilt-shift shallow depth of field, soft studio lighting — this must look like a miniature physical model, NOT a full-size photorealistic building, NOT an illustration',
+      promptKo: '실제 건축 모형(디오라마)을 촬영한 사진. 폼보드·발사우드·아크릴 같은 모형 재료의 질감과 이음새가 보이고, 미니어처 나무와 조경, 틸트시프트 효과로 피사계심도가 얕은 스튜디오 조명 사진 — 반드시 미니어처 모형처럼 보여야 하며, 실제 크기의 사실적인 건물 사진이 되면 안 되고, 일러스트도 아님',
+      noParam: 'full-size photorealistic building' },
+    { v: 'watercolor', ko: '수채화처럼', en: 'watercolor illustration',
+      promptEn: 'a traditional watercolor painting on textured watercolor paper, with visible paper grain, soft bleeding and blooming pigment edges, loose expressive brushwork depicting the building exterior and surrounding landscaping, light washes of color, white paper showing through as highlights — this must look like a hand-painted watercolor artwork, NOT a photograph, NOT digital art, NOT photorealistic',
+      promptKo: '질감이 있는 수채화 종이 위에 그린 전통 수채화 그림. 종이 결이 드러나고 물감이 은은하게 번지는 부드러운 경계, 건물 외관과 주변 조경을 자유롭고 표현적인 붓터치로 묘사, 옅은 색 레이어, 하이라이트 부분은 종이 여백이 그대로 드러남 — 반드시 손으로 그린 수채화 그림처럼 보여야 하며, 사진이나 디지털 아트, 사실적인 이미지가 되면 안 됨',
+      noParam: 'photograph, photorealistic, 3d render' },
+    { v: 'concept_sketch', ko: '개념 스케치처럼', en: 'architectural concept sketch',
+      promptEn: 'a loose hand-drawn architectural concept sketch: black ink or ballpoint pen line work on white paper, minimal or no color, quick expressive gesture lines for the building massing and landscaping, visible sketchy construction lines — this must look like an unfinished hand-drawn sketch, NOT a finished rendering, NOT a photograph, NOT photorealistic',
+      promptKo: '손으로 빠르게 그린 건축 개념 스케치. 흰 종이 위에 검은 잉크나 볼펜으로 그린 선 위주의 그림, 색은 거의 없거나 최소화, 건물 매스와 조경을 자유롭고 표현적인 스케치 선과 보조선으로 표현 — 반드시 미완성 느낌의 손그림 스케치처럼 보여야 하며, 완성된 렌더링이나 사진, 사실적인 이미지가 되면 안 됨',
+      noParam: 'photograph, photorealistic, color, 3d render' },
+    { v: 'marker', ko: '마커 그림처럼', en: 'architectural marker rendering',
+      promptEn: "a hand-colored architectural presentation marker illustration, in the style of an architecture student's marker-rendered elevation board: a black ink or fineliner line drawing of the building facade as the base, colored over with vivid, saturated Copic/Prismacolor-style alcohol markers, bold visible parallel marker strokes and streaking with slight color overlap and bleeding at edges, trees and landscaping rendered as clustered dabbed marker strokes of green (not photographic leaf detail), warm golden-hour toned color grading, flat graphic color blocking rather than smooth continuous-tone shading, visible paper texture, a slightly stylized and illustrative (not literally proportioned) look — treat this exactly as if an architecture student hand-colored a black-and-white elevation line drawing with real alcohol markers and scanned it; it is critically important that the result does NOT look like a photograph, does NOT have photographic lighting, reflections, or depth of field, does NOT have smooth photorealistic or 3D-rendered gradients, and is NOT a digital painting — it must have the flat, hand-colored, slightly imperfect marker-and-fineliner look",
+      promptKo: '건축학과 학생의 마커 입면 프레젠테이션 보드처럼, 검은 잉크나 피그먼트 라이너로 그린 건물 파사드 선 드로잉을 바탕에 두고 그 위에 코픽·프리즈마칼라 같은 알코올 마커로 채색한 손그림 스타일. 채도가 높고 선명한 색으로, 굵고 나란한 마커 스트로크와 겹쳐 칠한 자국·번짐이 뚜렷하게 보이고, 나무·조경은 사실적인 잎 디테일이 아니라 초록색 마커를 통통 찍은 듯한 뭉치 형태로 표현됨. 노을빛이 도는 따뜻한 색감, 매끈한 그라데이션이 아닌 평면적인 색면 위주의 표현, 종이 질감이 살아있고 실제 비례보다 살짝 일러스트적으로 단순화된 느낌 — 건축과 학생이 흑백 입면 선 드로잉을 실제 알코올 마커로 손수 채색해서 스캔한 것처럼 보여야 함. 결과물은 반드시 사진 같은 조명·반사·피사계심도가 없어야 하고, 매끈한 사실적/3D 렌더 그라데이션이 아니어야 하며, 디지털 페인팅도 아니어야 함 — 평면적이고 손으로 칠한 듯 살짝 불완전한 마커+펜선 느낌이어야 함',
+      noParam: 'photograph, photorealistic, 3d render, smooth gradient, realistic, digital painting, depth of field' },
+    { v: 'cg_render', ko: '3D CG 렌더처럼', en: 'clean 3D CG architectural render',
+      promptEn: 'a clean 3D CG architectural visualization render in the style of V-Ray, Corona, or Unreal Engine: smooth soft global illumination, slightly stylized materials, subtle ambient occlusion, a realistic sky and landscaping, the polished synthetic look of an architectural rendering used in a design presentation — not a real photograph, not hand-drawn, not painterly',
+      promptKo: '브이레이·코로나·언리얼엔진 스타일의 건축 3D 시각화 렌더링. 부드러운 글로벌 일루미네이션과 약간 스타일라이즈된 재질, 은은한 앰비언트 오클루전, 사실적인 하늘과 조경이 있는 디자인 프레젠테이션용 렌더링 특유의 매끈하고 인공적인 느낌 — 실제 사진이 아니며, 손그림도 회화적인 느낌도 아님',
+      noParam: 'hand-drawn, sketch, photograph, painting' },
+    { v: 'pencil', ko: '연필 스케치처럼', en: 'graphite pencil sketch',
+      promptEn: "a hand-drawn graphite pencil sketch on white paper: black and white only, visible individual pencil strokes, cross-hatching and shading for depth on the building facade and landscaping, loose architectural drawing style — this must look like an artist's hand-drawn pencil sketch, NOT colored, NOT a photograph, NOT a digital render",
+      promptKo: '흰 종이 위에 흑연 연필로 그린 손그림. 흑백으로만 표현되고 건물 파사드와 조경에 개별 연필 선과 크로스해칭으로 음영을 표현한 자유로운 건축 드로잉 스타일 — 반드시 손으로 그린 연필 스케치처럼 보여야 하며, 컬러가 없고, 사진이나 디지털 렌더가 되면 안 됨',
+      noParam: 'color, photograph, photorealistic, 3d render' },
+    { v: 'oil_painting', ko: '유화처럼', en: 'oil painting',
+      promptEn: 'an oil painting on canvas: visible brush strokes and impasto texture, rich blended colors, painterly light and shadow rendering in the style of a fine art architectural landscape painting — this must look like a hand-painted oil artwork, NOT a photograph, NOT a digital illustration, NOT photorealistic',
+      promptKo: '캔버스에 그린 유화. 붓터치와 두껍게 쌓인 물감 질감이 보이고 색이 풍부하게 섞인 회화적인 명암 표현의 건축 풍경화 — 반드시 손으로 그린 유화 작품처럼 보여야 하며, 사진이나 디지털 일러스트, 사실적인 이미지가 되면 안 됨',
+      noParam: 'photograph, digital art, photorealistic, 3d render' },
+    { v: 'cad_3d', ko: '3D 설계도면(CAD)처럼', en: '3D CAD architectural drawing',
+      promptEn: 'a technical 3D CAD architectural drawing, in the style of a SketchUp / Revit / AutoCAD 3D model export: crisp black vector linework on a white background, an isometric or axonometric 3D projection of the building, visible edge lines for every wall, window, roof plane, and volume intersection, flat hatching patterns and minimal or no shading to indicate different materials, thin dimension lines, extension lines, and small technical annotations/labels along the edges, no atmospheric lighting, no gradients, no textures, no rendered materials — this must look like an exported 3D CAD line drawing or wireframe model used in a construction/design document, NOT a photograph, NOT a photorealistic render, NOT a hand-drawn sketch, NOT a painting',
+      promptKo: '스케치업·레빗·오토캐드에서 뽑은 3D 모델 도면처럼, 흰 배경 위에 선명한 검은 벡터 선으로 그려진 기술 도면. 건물을 아이소메트릭(등각) 또는 액소노메트릭 3D 투상도로 표현하고, 모든 벽·창·지붕면·볼륨 교차부의 모서리 선이 또렷하게 보이며, 재질 구분을 위한 평면적인 해칭 패턴과 최소한의 음영만 사용됨. 가장자리를 따라 얇은 치수선·인출선·간단한 기술 주석(라벨)이 표시됨. 분위기 있는 조명이나 그라데이션, 질감, 렌더링된 재질감은 없어야 함 — 반드시 시공·설계 도면에 쓰이는 3D CAD 선도면(와이어프레임 모델)처럼 보여야 하며, 사진이나 사실적인 렌더, 손그림 스케치, 회화가 되면 절대 안 됨',
+      noParam: 'photograph, photorealistic, 3d render, realistic materials, textures, gradient, shading, hand-drawn, painting' },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var ASPECT_OPTIONS = [
+    { v: 'r16_9', ko: '16:9', en: '1920×1080', ratio: '16:9', promptEn: 'wide landscape', promptKo: '가로 와이드' },
+    { v: 'r9_16', ko: '9:16 · 쇼츠', en: '1080×1920', ratio: '9:16', promptEn: 'tall vertical, Shorts and Reels format', promptKo: '세로형, 쇼츠·릴스용' },
+    { v: 'r4_3', ko: '4:3', en: '1600×1200', ratio: '4:3', promptEn: 'standard landscape', promptKo: '가로 표준' },
+    { v: 'r3_4', ko: '3:4 · 인스타 그리드', en: '1080×1440', ratio: '3:4', promptEn: 'vertical portrait, Instagram grid format', promptKo: '세로형, 인스타그램 그리드용', safe: true },
+    { v: 'r4_5', ko: '4:5 · 인스타 피드', en: '1080×1350', ratio: '4:5', promptEn: 'vertical portrait, Instagram feed format', promptKo: '세로형, 인스타그램 피드용', safe: true },
+    { v: 'r3_2', ko: '3:2', en: '1800×1200', ratio: '3:2', promptEn: 'classic photo landscape', promptKo: '가로 사진 비율' },
+    { v: 'r2_3', ko: '2:3', en: '1200×1800', ratio: '2:3', promptEn: 'classic photo portrait', promptKo: '세로 사진 비율' },
+    { v: 'r1_1', ko: '1:1', en: '1080×1080', ratio: '1:1', promptEn: 'square', promptKo: '정사각형' }
+  ];
+
+  // 인스타용 비율(3:4, 4:5)은 피드·그리드에서 가장자리가 잘릴 수 있어서, 핵심 피사체와 글자를
+  // 가운데에 두고 사방에 여백을 두라는 지시를 함께 넣는다.
+  var SAFE_ZONE_EN = 'Keep the main subject and any text well inside the central area of the frame, leaving generous empty margin at the top, bottom and sides so nothing important is lost if the image is cropped.';
+  var SAFE_ZONE_KO = '핵심 피사체와 글자는 화면 가운데 영역 안에 두고, 위·아래·양옆에 넉넉한 여백을 남겨서 이미지가 잘려도 중요한 부분이 사라지지 않게 해줘.';
+  var SAFE_ZONE_MJ = 'main subject centered with generous empty margin on all sides, safe for cropping';
+
+  // 챗GPT·제미나이는 비율 문장을 중간에 두면 무시하고 정사각형으로 만드는 일이 있어서,
+  // 비율을 선택했을 때는 프롬프트 맨 앞에 "가장 중요한 지시"로 두고 정사각형이 아님을 적는다.
+  function aspectLeadEn() {
+    if (!state.aspect) return null;
+    var s = 'Image format (most important): ' + state.aspect.ratio + ' aspect ratio, ' + state.aspect.promptEn + '.';
+    return state.aspect.ratio === '1:1' ? s : s + ' Do NOT output a square image.';
+  }
+  function aspectLeadKo() {
+    if (!state.aspect) return null;
+    var s = '화면 비율(가장 중요): ' + state.aspect.ratio + '(' + state.aspect.promptKo + ').';
+    return state.aspect.ratio === '1:1' ? s : s + ' 정사각형으로 만들지 마.';
+  }
+
+  var OBJECT_MODES = [
+    { v: 'form', ko: '형태·실루엣', en: 'overall massing and silhouette', koPhrase: '전체 매스와 실루엣(형태)' },
+    { v: 'surface', ko: '표면 패턴·질감', en: 'surface pattern and material texture on the facade', koPhrase: '파사드의 표면 패턴과 재질감' },
+    { v: 'color', ko: '색감', en: 'color palette', koPhrase: '색감' },
+    { v: 'rhythm', ko: '비례·반복 리듬', en: 'proportions and repeating rhythm of windows, openings and panels', koPhrase: '비례와 창·개구부·패널의 반복 리듬' }
+  ];
+
+  var INTL_ARCHITECT_OPTIONS = [
+    { v: 'ando', ko: 'Tadao Ando (일본)', en: 'Tadao Ando' },
+    { v: 'hadid', ko: 'Zaha Hadid (이라크·영국)', en: 'Zaha Hadid' },
+    { v: 'piano', ko: 'Renzo Piano (이탈리아)', en: 'Renzo Piano' },
+    { v: 'gehry', ko: 'Frank Gehry (캐나다·미국)', en: 'Frank Gehry' },
+    { v: 'zumthor', ko: 'Peter Zumthor (스위스)', en: 'Peter Zumthor' },
+    { v: 'kuma', ko: 'Kengo Kuma (일본)', en: 'Kengo Kuma' },
+    { v: 'siza', ko: 'Álvaro Siza (포르투갈)', en: 'Álvaro Siza' },
+    { v: 'big', ko: 'Bjarke Ingels (덴마크)', en: 'Bjarke Ingels (BIG)' },
+    { v: 'chipperfield', ko: 'David Chipperfield (영국)', en: 'David Chipperfield' },
+    { v: 'vtn', ko: 'Vo Trong Nghia (베트남)', en: 'Vo Trong Nghia' }
+  ];
+
+  var KOREAN_ARCHITECT_OPTIONS = [
+    { v: 'seung', ko: '승효상', en: 'Seung H-Sang' },
+    { v: 'cho_minsuk', ko: '조민석', en: 'Minsuk Cho' },
+    { v: 'yoo_hyunjoon', ko: '유현준', en: 'Yoo Hyun-joon' },
+    { v: 'itami_jun', ko: '이타미 준', en: 'Itami Jun' },
+    { v: 'cho_byoungsoo', ko: '조병수', en: 'Byoung Soo Cho' },
+    { v: 'kim_swoogeun', ko: '김수근', en: 'Kim Swoo-geun' },
+    { v: 'kim_hyungsub', ko: '김형섭', en: 'Kim Hyung-sub',
+      promptEn: "Korean architect Kim Hyung-sub of WITH Architects (based in Jeju): a functionalist design approach where the floor plan and circulation drive the form rather than decorative expression; white stucco-finished cuboid volumes stacked with a slight floor-by-floor offset, occasionally with one facet chamfered or angled to break the orthogonal form; a secondary material axis of grey striped stone or tile cladding used alongside, or sometimes dominating, the white volumes; a repeated cantilevered volume as a signature gesture — a visual illusion of floating achieved through cladding and detailing rather than a dramatic structural change, often resting on a single slender round column, and at a larger scale sometimes extending to an entire open ground-floor corner lifted on slender piloti columns; an exposed board-formed concrete base with visible formwork marks grounding the white masses on sloped, rocky terrain, treating honestly expressed structure as a source of beauty; asymmetrically scattered punched window openings — one large picture window paired with several smaller windows; public-facing facades opened up in glass while service-side elevations such as cores are kept closed and solid; black steel rooftop railings, black steel canopy roofs over covered stairs and entries, and vertical louver screens (often a warm wood tone); volcanic basalt stone walls and stone paving — including bollard-lit stone-paved approach paths in larger projects — rooting the building in its Jeju island context; in bigger projects, multiple white volumes are grouped and staggered around a shared paved courtyard rather than treated as one single block; and, where the site calls for it, a flexible reinterpretation of vernacular elements such as gable or tiled hip roofs, arches, or brick rather than one fixed formula, always avoiding decorative historicist quotation in favor of restrained material honesty",
+      promptKo: "제주를 기반으로 활동하는 건축가 김형섭(위드건축사사무소)의 디자인 언어 — 형태보다 평면과 동선 등 기능이 설계를 이끄는 기능주의, 흰색 스터코 마감의 입방체 매스를 층별로 살짝 어긋나게 쌓는 조형(간혹 한쪽 모서리를 사선으로 깎아 각진 면을 만들기도 함), 흰색과 나란히 쓰이거나 때로는 건물 전체를 뒤덮기도 하는 두 번째 재료 축으로서의 회색 줄무늬 스톤·타일 클래딩, 구조를 무리하게 바꾸지 않고 마감과 디테일로 '떠 있는 착시'를 만들어내는 캔틸레버(돌출 매스)가 반복되는 시그니처 제스처(종종 가늘고 둥근 기둥 하나로 받치며, 규모가 큰 프로젝트에서는 필로티처럼 저층 모서리 전체를 가는 기둥으로 들어 올리기도 함), 거푸집 자국이 남은 노출콘크리트 기단부가 경사지·암반 대지 위에서 흰 매스를 받치며 구조를 정직하게 드러내는 것을 아름다움으로 보는 태도, 큰 창 하나와 작은 창 여러 개가 비대칭적으로 흩어진 펀칭 개구부, 공적인 파사드는 유리로 열고 코어 등 서비스 면은 닫아 대비를 주는 방식, 검정 철제 옥상 난간과 계단·출입구를 덮는 검정 철제 캐노피 지붕, 세로 루버 스크린(대개 따뜻한 우드톤), 화산석 돌담과 석재 포장 — 규모가 큰 프로젝트에서는 볼라드 조명이 놓인 석재 포장 진입로까지 — 로 제주 대지의 맥락을 살리는 디테일, 큰 프로젝트에서는 여러 개의 흰 매스를 하나의 덩어리로 뭉치지 않고 공유하는 포장 마당을 중심으로 무리 지어 어긋나게 배치하는 방식, 그리고 대지 상황에 따라 박공지붕이나 기와 지붕, 아치, 벽돌 같은 전통 어법도 하나의 고정된 스타일을 고집하지 않고 유연하게 재해석하되, 장식적·표면적인 역사주의 인용은 피하고 절제된 재료의 정직성을 지향하는 태도" },
+    { v: 'custom', ko: '직접 입력', en: '', custom: true }
+  ];
+
+  var CATEGORIES = [
+    { id: 'source', title: '사진·도면 유형', hint: '단일 선택', desc: '작업할 원본 이미지의 종류를 선택하고, 각 항목 아래 영역을 클릭하거나 파일을 드래그해서 참고 이미지를 첨부하세요.', type: 'single', options: SOURCE_OPTIONS,
+      note: '선택한 원본 이미지의 카메라 시점(앵글·구도·원근감)은 절대 바뀌지 않도록, 모든 프롬프트에 "시점 변경 금지" 지시가 자동으로 포함됩니다. 각 항목 아래 점선 영역을 클릭하거나 이미지를 드래그하면 첨부되며, 첨부와 동시에 그 항목이 자동으로 선택됩니다 — 첨부한 이미지는 이 화면에만 표시되고 어디로도 전송되지 않으며, 실제 미드저니·챗GPT·제미나이에는 프롬프트를 붙여넣을 때 별도로 직접 첨부해야 합니다.' },
+    { id: 'planMode', title: '도면 표현 방식', hint: '단일 선택', desc: '2D 도면을 선택했을 때, 도면을 어떻게 표현할지 고르세요.', type: 'single', options: PLAN_MODE_OPTIONS,
+      conditional: { on: 'source', values: ['plan'] },
+      note: '‘특정 파사드(부분)만 지정’을 고르면, 업로드할 도면 이미지 위에 반영하고 싶은 부분을 원이나 사각형으로 표시(마킹)해서 첨부해야 그 부분만 정확히 반영됩니다. 두 방식 모두 도면에 이미 그려진 조경 배치, 담장·대문 위치, 주차 공간, 진입로는 임의로 바뀌지 않도록 모든 프롬프트에 자동으로 지시가 포함됩니다.' },
+    { id: 'buildingType', title: '건물 용도', hint: '단일 선택', desc: '리모델링할 건물의 용도를 선택하세요.', type: 'single', options: BUILDING_TYPE_OPTIONS },
+    { id: 'style', title: '외관 스타일', hint: '단일 선택', desc: '전체적인 외관 디자인 스타일 방향을 선택하세요.', type: 'single', options: STYLE_OPTIONS },
+    { id: 'concept', title: '건축적 개념', hint: '복수 선택', desc: '매스·파사드에 반영할 개념을 원하는 만큼 고르세요. (선택 사항)', type: 'multi', options: CONCEPT_OPTIONS },
+    { id: 'palette', title: '컬러 팔레트', hint: '단일 선택', desc: '중심이 될 색감 톤을 선택하세요. (선택 사항)', type: 'single', options: PALETTE_OPTIONS },
+    { id: 'material', title: '외장재', hint: '복수 선택', desc: '외벽·지붕·창호/대문별로 쓸 재료를 원하는 만큼 고르세요. (선택 사항)', type: 'multi', groups: [
+        { id: 'wall', label: '외벽', options: WALL_MATERIAL_OPTIONS },
+        { id: 'roof', label: '지붕', options: ROOF_MATERIAL_OPTIONS },
+        { id: 'window', label: '창호·대문', options: WINDOW_MATERIAL_OPTIONS }
+      ] },
+    { id: 'lighting', title: '조명', hint: '단일 선택', desc: '외부를 밝힐 조명 컨셉을 선택하세요. (선택 사항)', type: 'single', options: LIGHTING_OPTIONS },
+    { id: 'renderStyle', title: '표현·렌더 스타일', hint: '단일 선택', desc: '결과 이미지를 어떤 방식으로 표현할지 선택하세요. (선택 사항, 기본은 실사 사진)', type: 'single', options: RENDER_STYLE_OPTIONS, customPlaceholder: '예: 아이소메트릭 3D 일러스트처럼' },
+    { id: 'aspect', title: '화면 비율·사이즈', hint: '단일 선택', desc: '결과 이미지의 가로·세로 비율을 고르세요. 칩 아래 숫자는 권장 출력 크기예요. (선택 사항)', type: 'single', options: ASPECT_OPTIONS, deselectable: true,
+      note: '선택하지 않으면 미드저니는 16:9로 만들어지고, 챗GPT·제미나이는 원본 사진·도면의 비율을 따릅니다. 선택한 칩을 다시 누르면 해제돼요. 프롬프트에는 비율만 들어가고(챗GPT·제미나이는 맨 앞에 "정사각형으로 만들지 말 것"과 함께 들어가요), 사진을 편집하는 경우 원본과 비율이 다르면 잘리거나 늘어날 수 있어요. 인스타용(3:4, 4:5)은 가장자리가 잘릴 수 있어서 핵심 피사체와 글자를 가운데에 두고 여백을 남기라는 문장도 함께 들어갑니다.' },
+    { id: 'designer', title: '레퍼런스 건축가', hint: '단일 선택', desc: '이 건물의 스타일에 참고하고 싶은 건축가를 선택하세요. (선택 사항)', type: 'single', groups: [
+        { id: 'intl', label: '해외 건축가', options: INTL_ARCHITECT_OPTIONS },
+        { id: 'kr', label: '국내 건축가', options: KOREAN_ARCHITECT_OPTIONS }
+      ], note: '선택한 건축가의 시그니처 스타일 무드를 참고하라는 지시가 프롬프트에 추가됩니다. 특정 작품을 그대로 복제하지 않고, 방향을 잡는 참고용으로만 사용하세요.' }
+  ];
+
+  // ---------- Mood switcher ----------
+  var MOOD_KEY = 'erps-mood-v1';
+
+  function applyMood(mood, persist) {
+    document.documentElement.dataset.mood = mood;
+    document.querySelectorAll('.mood-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.mood === mood); });
+    if (persist) {
+      try { localStorage.setItem(MOOD_KEY, mood); } catch (e) {}
+    }
+  }
+
+  document.getElementById('moodSwitch').addEventListener('click', function (e) {
+    var btn = e.target.closest('.mood-btn');
+    if (!btn) return;
+    applyMood(btn.dataset.mood, true);
+  });
+
+  (function initMood() {
+    var saved = null;
+    try { saved = localStorage.getItem(MOOD_KEY); } catch (e) {}
+    var mood = saved || ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'noir' : 'studio');
+    applyMood(mood, false);
+  })();
+
+  // ---------- State ----------
+  var state = {
+    source: null, planMode: null, buildingType: null, style: null,
+    concept: [], palette: null, material: { wall: [], roof: [], window: [] }, lighting: null,
+    renderStyle: null, aspect: null, designer: null,
+    extra: '',
+    sourceImages: { bare: null, existing: null, sketchup: null, plan: null }
+  };
+  // 사물 이미지 → 건물 변환 (이미지는 메모리에만 보관, 저장·전송되지 않음)
+  var objectRef = { images: [], modes: { form: true, surface: true, color: false, rhythm: false }, desc: '' };
+  var customText = { buildingType: '', style: '', palette: '', lighting: '', renderStyle: '', designer: '' };
+  var activeTool = 'mj';
+  var sectionsById = {};
+
+  // ---------- Build category UI ----------
+  var categoriesEl = document.getElementById('categories');
+
+  CATEGORIES.forEach(function (cat, idx) {
+    var section = document.createElement('section');
+    section.className = 'category';
+    sectionsById[cat.id] = section;
+
+    var head = document.createElement('div');
+    head.className = 'category-head';
+    head.innerHTML =
+      '<div class="category-title"><span class="step-index">' + String(idx + 1).padStart(2, '0') + '</span><h2>' + cat.title + '</h2></div>' +
+      '<span class="hint">' + cat.hint + '</span>';
+    section.appendChild(head);
+
+    var desc = document.createElement('p');
+    desc.className = 'desc';
+    desc.textContent = cat.desc;
+    section.appendChild(desc);
+
+    if (cat.note) {
+      var noteEl = document.createElement('p');
+      noteEl.className = 'category-note';
+      noteEl.innerHTML = '<b>Tip.</b> ' + cat.note;
+      section.appendChild(noteEl);
+    }
+
+    if (cat.id === 'source') {
+      buildSourceChips(section, cat);
+      categoriesEl.appendChild(section);
+      return;
+    }
+
+    if (cat.groups) {
+      cat.groups.forEach(function (grp) {
+        var groupWrap = document.createElement('div');
+        groupWrap.className = 'subgroup';
+
+        var groupLabel = document.createElement('div');
+        groupLabel.className = 'subgroup-label';
+        groupLabel.textContent = grp.label;
+        groupWrap.appendChild(groupLabel);
+
+        var groupChips = document.createElement('div');
+        groupChips.className = 'chips';
+
+        grp.options.forEach(function (opt) {
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'chip';
+          chip.dataset.cat = cat.id;
+          chip.dataset.group = grp.id;
+          chip.dataset.val = opt.v;
+          var inner = '<span>' + opt.ko + '</span>';
+          if (opt.en) inner += '<span class="en-tag">' + opt.en + '</span>';
+          chip.innerHTML = inner;
+
+          chip.addEventListener('click', function () {
+            if (cat.type === 'single') {
+              handleGroupedSingleClick(cat, grp, opt, chip);
+            } else {
+              handleGroupedChipClick(cat, grp, opt, chip);
+            }
+          });
+
+          groupChips.appendChild(chip);
+        });
+
+        groupWrap.appendChild(groupChips);
+        section.appendChild(groupWrap);
+      });
+
+      if (cat.type === 'single') {
+        var hasCustomGrouped = cat.groups.some(function (g) { return g.options.some(function (o) { return o.custom; }); });
+        if (hasCustomGrouped) {
+          var customWrapGrouped = document.createElement('div');
+          customWrapGrouped.className = 'custom-wrap';
+          customWrapGrouped.innerHTML = '<input type="text" placeholder="예: 안도 다다오 느낌으로" data-custom-for="' + cat.id + '">';
+          section.appendChild(customWrapGrouped);
+          var inputGrouped = customWrapGrouped.querySelector('input');
+          inputGrouped.addEventListener('input', function () {
+            customText[cat.id] = inputGrouped.value;
+            render();
+          });
+        }
+      }
+
+      categoriesEl.appendChild(section);
+      return;
+    }
+
+    var chips = document.createElement('div');
+    chips.className = 'chips';
+
+    var customWrap = null;
+
+    cat.options.forEach(function (opt) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.dataset.cat = cat.id;
+      chip.dataset.val = opt.v;
+      var inner = '<span>' + opt.ko + '</span>';
+      if (opt.en) inner += '<span class="en-tag">' + opt.en + '</span>';
+      chip.innerHTML = inner;
+
+      chip.addEventListener('click', function () {
+        handleChipClick(cat, opt, chip, section);
+      });
+
+      chips.appendChild(chip);
+    });
+
+    section.appendChild(chips);
+
+    var hasCustom = cat.options.some(function (o) { return o.custom; });
+    if (hasCustom) {
+      customWrap = document.createElement('div');
+      customWrap.className = 'custom-wrap';
+      customWrap.innerHTML = '<input type="text" placeholder="' + (cat.customPlaceholder || '예: 빈티지 아르데코 스타일') + '" data-custom-for="' + cat.id + '">';
+      section.appendChild(customWrap);
+      var input = customWrap.querySelector('input');
+      input.addEventListener('input', function () {
+        customText[cat.id] = input.value;
+        render();
+      });
+    }
+
+    categoriesEl.appendChild(section);
+  });
+
+  // ---------- 사물 이미지 → 건물 변환 (선택 사항) ----------
+  var objectSection = document.createElement('section');
+  objectSection.className = 'category';
+  objectSection.innerHTML =
+    '<div class="category-head"><div class="category-title"><span class="step-index">' + String(CATEGORIES.length + 1).padStart(2, '0') + '</span><h2>사물 이미지 → 건물 변환</h2></div><span class="hint">선택 사항 · 복수 선택</span></div>' +
+    '<p class="desc">신발·꽃병·조개껍질 같은 사물 사진의 형태나 질감을 건물 외관 디자인으로 바꾸고 싶을 때 쓰세요. 쓰지 않으면 비워 두세요.</p>' +
+    '<p class="category-note"><b>Tip.</b> 사진은 한 장으로도 되지만, 같은 사물을 다른 각도에서 찍은 2~3장이 더 정확합니다. 사물이 건물로 그대로 변하는 게 아니라, 아래에서 고른 요소(형태·질감 등)만 건축 디자인으로 옮겨지도록 프롬프트가 만들어집니다. 첨부한 이미지는 이 화면에만 표시되고 어디로도 전송되지 않으며, 미드저니·챗GPT·제미나이에는 프롬프트를 붙여넣을 때 사물 사진도 별도로 직접 첨부해야 합니다.</p>';
+  var objDrop = document.createElement('div');
+  objDrop.className = 'obj-drop';
+  objDrop.setAttribute('role', 'button');
+  objDrop.tabIndex = 0;
+  objectSection.appendChild(objDrop);
+  var objFileInput = document.createElement('input');
+  objFileInput.type = 'file';
+  objFileInput.accept = 'image/*';
+  objFileInput.multiple = true;
+  objFileInput.style.display = 'none';
+  objectSection.appendChild(objFileInput);
+
+  var objSubhead = document.createElement('div');
+  objSubhead.className = 'obj-subhead';
+  objSubhead.textContent = '건물로 옮길 요소 (여러 개 선택 가능)';
+  objectSection.appendChild(objSubhead);
+  var objChips = document.createElement('div');
+  objChips.className = 'chips';
+  OBJECT_MODES.forEach(function (m) {
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.dataset.cat = 'objectMode';
+    chip.dataset.val = m.v;
+    chip.innerHTML = '<span>' + m.ko + '</span>';
+    chip.addEventListener('click', function () {
+      objectRef.modes[m.v] = !objectRef.modes[m.v];
+      chip.classList.toggle('selected', objectRef.modes[m.v]);
+      render();
+    });
+    objChips.appendChild(chip);
+  });
+  objectSection.appendChild(objChips);
+  var objDescInput = document.createElement('input');
+  objDescInput.type = 'text';
+  objDescInput.className = 'obj-desc';
+  objDescInput.placeholder = '사물이 무엇인지 짧게 (예: 전복 껍데기 / 영어로 쓰면 미드저니에서 더 정확해요)';
+  objDescInput.addEventListener('input', function () {
+    objectRef.desc = objDescInput.value.trim();
+    render();
+  });
+  objectSection.appendChild(objDescInput);
+  categoriesEl.appendChild(objectSection);
+
+  function renderObjectDrop() {
+    objDrop.classList.toggle('has-image', objectRef.images.length > 0);
+    if (!objectRef.images.length) {
+      objDrop.innerHTML = '<span class="chip-drop-hint">클릭 또는 드래그로 사물 사진 첨부 (여러 장 가능)</span>';
+      return;
+    }
+    objDrop.innerHTML = objectRef.images.map(function (img, i) {
+      return '<span class="obj-item"><img class="chip-thumb" src="' + img.dataUrl + '" alt="">' +
+        '<span class="chip-filename" style="max-width:110px">' + escapeHtml(img.name) + '</span>' +
+        '<button type="button" class="chip-remove-btn" data-idx="' + i + '" aria-label="이미지 제거">×</button></span>';
+    }).join('') + '<span class="chip-drop-hint">+ 더 추가</span>';
+  }
+
+  function addObjectFiles(fileList) {
+    var files = Array.prototype.slice.call(fileList || []);
+    var bad = false;
+    files.forEach(function (file) {
+      if (!file.type || file.type.indexOf('image/') !== 0) { bad = true; return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        objectRef.images.push({ name: file.name, dataUrl: reader.result });
+        renderObjectDrop();
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+    if (bad) {
+      objDrop.innerHTML = '<span class="chip-drop-error">이미지 파일만 첨부할 수 있어요</span>';
+      setTimeout(renderObjectDrop, 1800);
+    }
+  }
+
+  objDrop.addEventListener('click', function (e) {
+    var rm = e.target.closest('.chip-remove-btn');
+    if (rm) {
+      objectRef.images.splice(parseInt(rm.dataset.idx, 10), 1);
+      renderObjectDrop();
+      render();
+      return;
+    }
+    objFileInput.click();
+  });
+  objDrop.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target === objDrop) { e.preventDefault(); objFileInput.click(); }
+  });
+  objFileInput.addEventListener('change', function () {
+    addObjectFiles(objFileInput.files);
+    objFileInput.value = '';
+  });
+  ['dragenter', 'dragover'].forEach(function (evt) {
+    objDrop.addEventListener(evt, function (e) { e.preventDefault(); e.stopPropagation(); objDrop.classList.add('dragover'); });
+  });
+  ['dragleave', 'dragend'].forEach(function (evt) {
+    objDrop.addEventListener(evt, function (e) { e.preventDefault(); e.stopPropagation(); objDrop.classList.remove('dragover'); });
+  });
+  objDrop.addEventListener('drop', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    objDrop.classList.remove('dragover');
+    addObjectFiles(e.dataTransfer && e.dataTransfer.files);
+  });
+
+  function syncObjectModeChips() {
+    objChips.querySelectorAll('.chip').forEach(function (c) {
+      c.classList.toggle('selected', !!objectRef.modes[c.dataset.val]);
+    });
+  }
+
+  function resetObjectSection() {
+    objectRef = { images: [], modes: { form: true, surface: true, color: false, rhythm: false }, desc: '' };
+    objDescInput.value = '';
+    renderObjectDrop();
+    syncObjectModeChips();
+  }
+  renderObjectDrop();
+  syncObjectModeChips();
+
+  function objectActive() { return objectRef.images.length > 0 || !!objectRef.desc; }
+  function objectModes() {
+    return OBJECT_MODES.filter(function (m) { return objectRef.modes[m.v]; });
+  }
+  function joinAnd(arr) {
+    if (arr.length <= 1) return arr.join('');
+    // 항목 안에 이미 "and"가 들어 있어서 ', plus'로 이어 붙인다
+    return arr.slice(0, -1).join(', ') + ', plus ' + arr[arr.length - 1];
+  }
+  // 영어: 대화형(챗GPT/제미나이)용 문단
+  function objectSentenceEn(hasSource) {
+    var modes = objectModes();
+    var what = objectRef.desc ? ' (' + objectRef.desc + ')' : '';
+    var n = objectRef.images.length;
+    var attach;
+    if (n > 1) attach = (hasSource ? 'Separate photos of an object' + what + ' are also attached' : 'The attached images are photos of an object' + what) + ' — different views of the same object. ';
+    else if (n === 1) attach = (hasSource ? 'A separate photo of an object' + what + ' is also attached. ' : 'The attached image is a photo of an object' + what + '. ');
+    else attach = 'The design reference is an object: ' + objectRef.desc + '. ';
+    var take = modes.length ? 'translate its ' + joinAnd(modes.map(function (m) { return m.en; })) + ' into the architecture of the building' : 'translate its character into the architecture of the building';
+    return attach + 'Treat this object purely as a design reference: ' + take + '. Do NOT draw the object itself, and do not make the building a literal replica or giant enlargement of it — the result must be a real, buildable building exterior that is recognisably inspired by the object.';
+  }
+  function objectSentenceKo(hasSource) {
+    var modes = objectModes();
+    var what = objectRef.desc ? '(' + objectRef.desc + ')' : '';
+    var n = objectRef.images.length;
+    var attach;
+    if (n > 1) attach = (hasSource ? '건물 이미지와 별도로 어떤 사물' + what + '을 여러 각도에서 찍은 사진도 함께 첨부했어. ' : '첨부한 이미지들은 어떤 사물' + what + '을 여러 각도에서 찍은 사진이야. ');
+    else if (n === 1) attach = (hasSource ? '건물 이미지와 별도로 어떤 사물' + what + ' 사진도 함께 첨부했어. ' : '첨부한 이미지는 어떤 사물' + what + ' 사진이야. ');
+    else attach = '디자인 참고 사물은 ' + objectRef.desc + '야. ';
+    var take = modes.length ? '이 사물의 다음 요소를 건물의 건축 디자인으로 옮겨줘 — ' + modes.map(function (m) { return m.koPhrase; }).join(' / ') : '이 사물의 특징을 건물의 건축 디자인으로 옮겨줘';
+    return attach + '이 사물은 디자인 참고용으로만 사용해: ' + take + '. 사물 자체를 그리지 말고, 건물을 사물의 복제품이나 거대한 확대판처럼 만들지도 마 — 결과는 실제로 지을 수 있는 건물 외관이면서, 그 사물에서 영감을 받았다는 게 알아볼 수 있어야 해.';
+  }
+  // 미드저니용 키워드 구절
+  function objectPhraseMj() {
+    var modes = objectModes();
+    var subject = objectRef.desc || 'the reference object shown in the object image';
+    var take = modes.length ? joinAnd(modes.map(function (m) { return m.en; })) : 'its character';
+    return 'architecture inspired by ' + subject + ', translating its ' + take + ' into the building design, not a literal copy or enlargement of the object, a real buildable building exterior';
+  }
+  function objectPhraseMjKo() {
+    var modes = objectModes();
+    var subject = objectRef.desc || '참고 사물 사진';
+    var take = modes.length ? modes.map(function (m) { return m.koPhrase; }).join(' / ') : '사물의 특징';
+    return '사물에서 영감을 받은 건축: ' + subject + '에서 가져올 요소는 ' + take + ' — 이를 건물 디자인으로 옮김, 사물을 그대로 복제하거나 확대한 형태가 아닌 실제로 지을 수 있는 건물 외관';
+  }
+
+  // extra free-text category
+  var extraSection = document.createElement('section');
+  extraSection.className = 'category';
+  extraSection.innerHTML =
+    '<div class="category-head"><div class="category-title"><span class="step-index">' + String(CATEGORIES.length + 2).padStart(2, '0') + '</span><h2>추가 요청사항</h2></div><span class="hint">자유 입력</span></div>' +
+    '<p class="desc">위 항목으로 표현되지 않는 세부 요청을 자유롭게 적어주세요. (선택 사항)</p>';
+  var extraTa = document.createElement('textarea');
+  extraTa.className = 'extra-input';
+  extraTa.placeholder = '예: 도로에서 보이는 정면을 더 강조하고, 주차 공간은 2대 이상 확보되도록 해줘';
+  extraTa.addEventListener('input', function () {
+    state.extra = extraTa.value.trim();
+    render();
+  });
+  extraSection.appendChild(extraTa);
+  categoriesEl.appendChild(extraSection);
+
+  // ---------- Conditional categories (e.g. plan mode only for 2D drawing source) ----------
+  function updateConditionalVisibility() {
+    CATEGORIES.forEach(function (cat) {
+      if (!cat.conditional) return;
+      var controllingVal = state[cat.conditional.on];
+      var show = !!controllingVal && cat.conditional.values.indexOf(controllingVal.v) !== -1;
+      var sec = sectionsById[cat.id];
+      sec.style.display = show ? '' : 'none';
+      if (!show && state[cat.id]) {
+        state[cat.id] = null;
+        var selected = sec.querySelector('.chip.selected');
+        if (selected) selected.classList.remove('selected');
+      }
+    });
+  }
+
+  function handleChipClick(cat, opt, chip, section) {
+    if (cat.type === 'single' && cat.deselectable && chip.classList.contains('selected')) {
+      // 이미 선택된 칩을 다시 누르면 선택 해제 (화면 비율은 "선택 안 함"이 기본 동작)
+      chip.classList.remove('selected');
+      state[cat.id] = null;
+    } else if (cat.type === 'single') {
+      var siblings = section.querySelectorAll('.chip');
+      siblings.forEach(function (c) { c.classList.remove('selected'); });
+      chip.classList.add('selected');
+      state[cat.id] = opt;
+
+      var cw = section.querySelector('.custom-wrap');
+      if (cw) {
+        if (opt.custom) {
+          cw.classList.add('show');
+          cw.querySelector('input').focus();
+        } else {
+          cw.classList.remove('show');
+        }
+      }
+    } else {
+      var isSelected = chip.classList.toggle('selected');
+      if (isSelected) {
+        state[cat.id].push(opt);
+      } else {
+        state[cat.id] = state[cat.id].filter(function (o) { return o.v !== opt.v; });
+      }
+    }
+    updateConditionalVisibility();
+    render();
+  }
+
+  function handleGroupedChipClick(cat, grp, opt, chip) {
+    var arr = state[cat.id][grp.id];
+    var isSelected = chip.classList.toggle('selected');
+    if (isSelected) {
+      arr.push(opt);
+    } else {
+      state[cat.id][grp.id] = arr.filter(function (o) { return o.v !== opt.v; });
+    }
+    render();
+  }
+
+  function handleGroupedSingleClick(cat, grp, opt, chip) {
+    var allChipsInCat = sectionsById[cat.id].querySelectorAll('.chip');
+    allChipsInCat.forEach(function (c) { c.classList.remove('selected'); });
+    chip.classList.add('selected');
+    state[cat.id] = opt;
+
+    var cw = sectionsById[cat.id].querySelector('.custom-wrap');
+    if (cw) {
+      if (opt.custom) {
+        cw.classList.add('show');
+        cw.querySelector('input').focus();
+      } else {
+        cw.classList.remove('show');
+      }
+    }
+    render();
+  }
+
+  // ---------- Source chips: click-to-select + click/drag-to-upload a reference image ----------
+  function buildSourceChips(section, cat) {
+    var wrap = document.createElement('div');
+    wrap.className = 'chips';
+
+    cat.options.forEach(function (opt) {
+      var chip = document.createElement('div');
+      chip.className = 'chip chip-upload';
+      chip.dataset.cat = cat.id;
+      chip.dataset.val = opt.v;
+
+      var label = document.createElement('div');
+      label.className = 'chip-label';
+      label.setAttribute('role', 'button');
+      label.tabIndex = 0;
+      var inner = '<span>' + opt.ko + '</span>';
+      if (opt.en) inner += '<span class="en-tag">' + opt.en + '</span>';
+      label.innerHTML = inner;
+      label.addEventListener('click', function () { selectSourceOption(cat, opt, chip); });
+      label.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSourceOption(cat, opt, chip); }
+      });
+      chip.appendChild(label);
+
+      var drop = document.createElement('div');
+      drop.className = 'chip-dropzone';
+      chip.appendChild(drop);
+      renderDropzone(drop, opt);
+
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      fileInput.addEventListener('change', function () {
+        var f = fileInput.files && fileInput.files[0];
+        if (f) attachSourceImage(cat, opt, chip, f);
+        fileInput.value = '';
+      });
+      chip.appendChild(fileInput);
+
+      drop.addEventListener('click', function (e) {
+        e.stopPropagation();
+        fileInput.click();
+      });
+      ['dragenter', 'dragover'].forEach(function (evt) {
+        drop.addEventListener(evt, function (e) {
+          e.preventDefault(); e.stopPropagation();
+          drop.classList.add('dragover');
+        });
+      });
+      ['dragleave', 'dragend'].forEach(function (evt) {
+        drop.addEventListener(evt, function (e) {
+          e.preventDefault(); e.stopPropagation();
+          drop.classList.remove('dragover');
+        });
+      });
+      drop.addEventListener('drop', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        drop.classList.remove('dragover');
+        var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) attachSourceImage(cat, opt, chip, f);
+      });
+
+      wrap.appendChild(chip);
+    });
+
+    section.appendChild(wrap);
+  }
+
+  function renderDropzone(drop, opt) {
+    var img = state.sourceImages[opt.v];
+    if (img) {
+      drop.classList.add('has-image');
+      drop.innerHTML =
+        '<img class="chip-thumb" src="' + img.dataUrl + '" alt="">' +
+        '<span class="chip-filename">' + escapeHtml(img.name) + '</span>' +
+        '<button type="button" class="chip-remove-btn" aria-label="이미지 제거">×</button>';
+      drop.querySelector('.chip-remove-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        state.sourceImages[opt.v] = null;
+        renderDropzone(drop, opt);
+      });
+    } else {
+      drop.classList.remove('has-image');
+      drop.innerHTML = '<span class="chip-drop-hint">클릭 또는 드래그로 이미지 첨부</span>';
+    }
+  }
+
+  function attachSourceImage(cat, opt, chip, file) {
+    var drop = chip.querySelector('.chip-dropzone');
+    if (!file.type || file.type.indexOf('image/') !== 0) {
+      drop.innerHTML = '<span class="chip-drop-error">이미지 파일만 첨부할 수 있어요</span>';
+      setTimeout(function () { renderDropzone(drop, opt); }, 1800);
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function () {
+      state.sourceImages[opt.v] = { name: file.name, dataUrl: reader.result };
+      renderDropzone(drop, opt);
+      selectSourceOption(cat, opt, chip);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function selectSourceOption(cat, opt, chip) {
+    var siblings = sectionsById[cat.id].querySelectorAll('.chip');
+    siblings.forEach(function (c) { c.classList.remove('selected'); });
+    chip.classList.add('selected');
+    state[cat.id] = opt;
+    updateConditionalVisibility();
+    render();
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', function () {
+    state = { source: null, planMode: null, buildingType: null, style: null, concept: [], palette: null, material: { wall: [], roof: [], window: [] }, lighting: null, renderStyle: null, aspect: null, designer: null, extra: '', sourceImages: { bare: null, existing: null, sketchup: null, plan: null } };
+    customText = { buildingType: '', style: '', palette: '', lighting: '', renderStyle: '', designer: '' };
+    document.querySelectorAll('.chip.selected').forEach(function (c) { c.classList.remove('selected'); });
+    document.querySelectorAll('.custom-wrap').forEach(function (w) { w.classList.remove('show'); w.querySelector('input').value = ''; });
+    document.querySelector('.extra-input').value = '';
+    document.querySelectorAll('.chip-dropzone').forEach(function (d) {
+      var chip = d.closest('.chip');
+      var opt = SOURCE_OPTIONS.filter(function (o) { return o.v === chip.dataset.val; })[0];
+      if (opt) renderDropzone(d, opt);
+    });
+    resetObjectSection();
+    updateConditionalVisibility();
+    render();
+  });
+
+  updateConditionalVisibility();
+
+  // ---------- Helpers to read resolved values ----------
+  function resolvedKo(cat) {
+    var val = state[cat];
+    if (!val) return null;
+    if (val.custom) return customText[cat] || null;
+    return val.ko;
+  }
+  function resolvedEn(cat) {
+    var val = state[cat];
+    if (!val) return null;
+    if (val.custom) return customText[cat] || null;
+    return val.en;
+  }
+  // Render style has a short chip label (ko/en) plus a much more detailed
+  // promptKo/promptEn used only when actually building prompt text, so the
+  // ticket summary pill stays short while the prompt itself stays descriptive.
+  function renderStylePromptEn() {
+    var val = state.renderStyle;
+    if (!val) return null;
+    if (val.custom) return customText.renderStyle || null;
+    return val.promptEn || val.en;
+  }
+  function renderStylePromptKo() {
+    var val = state.renderStyle;
+    if (!val) return null;
+    if (val.custom) return customText.renderStyle || null;
+    return val.promptKo || val.ko;
+  }
+  // Some architects (e.g. lesser-known regional architects the image model may not
+  // recognize by name alone) carry an optional promptEn/promptKo describing their
+  // signature style in detail, used in place of the bare name when building prompts.
+  function designerPromptEn() {
+    var val = state.designer;
+    if (!val) return null;
+    if (val.custom) return customText.designer || null;
+    return val.promptEn || val.en;
+  }
+  function designerPromptKo() {
+    var val = state.designer;
+    if (!val) return null;
+    if (val.custom) return customText.designer || null;
+    return val.promptKo || val.ko;
+  }
+  function listKo(cat) { return state[cat].map(function (o) { return o.ko; }); }
+  function listEn(cat) { return state[cat].map(function (o) { return o.en; }); }
+
+  function materialBulletsEn() {
+    var out = [];
+    if (state.material.wall.length) out.push('Exterior walls: ' + state.material.wall.map(function (o) { return o.en; }).join(', '));
+    if (state.material.roof.length) out.push('Roof: ' + state.material.roof.map(function (o) { return o.en; }).join(', '));
+    if (state.material.window.length) out.push('Windows & gate: ' + state.material.window.map(function (o) { return o.en; }).join(', '));
+    return out;
+  }
+  function materialBulletsKo() {
+    var out = [];
+    if (state.material.wall.length) out.push('외벽: ' + state.material.wall.map(function (o) { return o.ko; }).join(', '));
+    if (state.material.roof.length) out.push('지붕: ' + state.material.roof.map(function (o) { return o.ko; }).join(', '));
+    if (state.material.window.length) out.push('창호·대문: ' + state.material.window.map(function (o) { return o.ko; }).join(', '));
+    return out;
+  }
+
+  // ---------- Tabs ----------
+  document.getElementById('tabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    activeTool = btn.dataset.tool;
+    document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    render();
+  });
+
+  // ---------- Prompt builders (English primary) ----------
+  function buildMidjourneyEN() {
+    var typeEn = resolvedEn('buildingType') || '[building type not selected]';
+    var styleEn = resolvedEn('style') || '[style not selected]';
+    var sourceVal = state.source ? state.source.v : null;
+
+    var planModeVal = state.planMode ? state.planMode.v : null;
+
+    var intro, viewpointTag, siteTag;
+    if (sourceVal === 'plan' && planModeVal === 'full') {
+      intro = "based on the attached 2D architectural drawing, a rendered full aerial/bird's-eye view of the entire site plan with the landscaping, fence/gate position, parking spaces, and driveway already drawn on the plan kept in place and the building's walls and roof raised, viewed from an elevated angle, centered on a";
+      viewpointTag = "single consistent aerial/bird's-eye viewpoint matching the site plan, the entire site visible at once, not an eye-level exterior shot";
+      siteTag = 'landscaping, fence/gate position, parking spaces, and driveway exactly matching the layout drawn on the site plan, do not add, remove, or move any of these elements';
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      intro = 'based only on the facade/portion marked or highlighted in the attached 2D drawing (ignore the rest of the drawing), a rendered eye-level exterior view of that single designated';
+      viewpointTag = "single consistent eye-level exterior viewpoint for only the marked facade/portion, matching that portion's layout on the drawing";
+      siteTag = 'landscaping, fence/gate position, parking spaces, and driveway exactly matching the layout drawn on the plan for that portion, do not add, remove, or move any of these elements';
+    } else if (sourceVal === 'plan') {
+      intro = 'based on the attached 2D architectural drawing, a rendered exterior view of a';
+      viewpointTag = 'single consistent eye-level exterior viewpoint that matches the drawing';
+      siteTag = 'landscaping, fence/gate position, parking spaces, and driveway exactly matching the layout drawn on the plan, do not add, remove, or move any of these elements';
+    } else if (sourceVal === 'bare') {
+      intro = 'transform this bare, under-construction building exterior photo into a finished';
+      viewpointTag = 'camera angle, lens perspective and viewpoint unchanged from the original photo';
+      siteTag = null;
+    } else if (sourceVal === 'existing') {
+      intro = 'redesign this existing building exterior photo into a';
+      viewpointTag = 'camera angle, lens perspective and viewpoint unchanged from the original photo';
+      siteTag = null;
+    } else if (sourceVal === 'sketchup') {
+      intro = 'develop this white, untextured SketchUp massing model into a fully finished, materialized';
+      viewpointTag = 'camera angle, lens perspective and viewpoint unchanged from the original SketchUp model view';
+      siteTag = 'exact massing, proportions, window and door openings, and roof form already modeled in SketchUp — do not alter the geometry, only add real-world materials, color, texture, and surface detail';
+    } else {
+      intro = 'a';
+      viewpointTag = null;
+      siteTag = null;
+    }
+
+    var parts = [];
+    parts.push(intro + ' ' + typeEn + ', ' + styleEn + ' exterior architectural design');
+
+    var renderStyleEnMj = renderStylePromptEn();
+    parts.push(renderStyleEnMj || 'photorealistic architectural exterior photography, ultra-detailed, architectural digest quality, 8k');
+
+    var conceptEn = listEn('concept');
+    if (conceptEn.length) parts.push('featuring ' + conceptEn.join(', '));
+
+    var paletteEn = resolvedEn('palette');
+    if (paletteEn) parts.push(paletteEn);
+
+    materialBulletsEn().forEach(function (b) { parts.push(b.toLowerCase()); });
+
+    var lightingEn = resolvedEn('lighting');
+    if (lightingEn) parts.push(lightingEn);
+
+    var designerEn = designerPromptEn();
+    if (designerEn) parts.push('in the style of ' + designerEn);
+
+    if (objectActive()) parts.push(objectPhraseMj());
+    if (viewpointTag) parts.push(viewpointTag);
+    if (siteTag) parts.push(siteTag);
+    if (state.aspect && state.aspect.safe) parts.push(SAFE_ZONE_MJ);
+    if (state.extra) parts.push(state.extra);
+
+    var mjParams = ' --ar ' + (state.aspect ? state.aspect.ratio : '16:9') + ' --v 6.1 --style raw';
+    if (state.renderStyle && state.renderStyle.noParam) {
+      mjParams += ' --no ' + state.renderStyle.noParam;
+    }
+
+    // 사물 사진만 쓰는 경우에는 건물 이미지 자리를 빼고 사물 이미지 자리만 둔다
+    var urlSlots = (sourceVal || !objectRef.images.length) ? '[PASTE IMAGE URL HERE] ' : '';
+    if (objectRef.images.length) urlSlots += '[PASTE OBJECT IMAGE URL HERE] ';
+    return urlSlots + parts.join(', ') + mjParams;
+  }
+
+  function buildMidjourneyKO() {
+    var typeKo = resolvedKo('buildingType') || '[건물 용도 미선택]';
+    var styleKo = resolvedKo('style') || '[스타일 미선택]';
+    var sourceVal = state.source ? state.source.v : null;
+
+    var planModeVal = state.planMode ? state.planMode.v : null;
+
+    var introKo;
+    if (sourceVal === 'plan' && planModeVal === 'full') introKo = '첨부한 2D 도면 전체를 기준으로, 도면에 그려진 조경 배치·담장/대문 위치·주차 공간·진입로를 그대로 유지한 채 벽과 지붕이 세워진, 위에서 비스듬히 내려다보는 전체 조감도로 렌더링된';
+    else if (sourceVal === 'plan' && planModeVal === 'part') introKo = '첨부한 2D 도면에서 표시(마킹)된 파사드/부분만을 기준으로 (다른 부분은 무시), 그 부분만 눈높이 시점으로 렌더링된';
+    else if (sourceVal === 'plan') introKo = '첨부한 2D 도면을 기준으로, 렌더링된';
+    else if (sourceVal === 'bare') introKo = '골조/공사 중 상태의 이 사진을 완성된';
+    else if (sourceVal === 'existing') introKo = '기존 외부 사진을 리모델링된';
+    else if (sourceVal === 'sketchup') introKo = '흰색 무재질 스케치업 매싱 모델을 재질과 색을 입혀 완성한';
+    else introKo = '';
+
+    var parts = [];
+    parts.push(introKo + ' ' + typeKo + ' 외관 (스타일: ' + styleKo + ')');
+
+    var renderStyleKoMj = renderStylePromptKo();
+    if (renderStyleKoMj) parts.push('표현 기법: ' + renderStyleKoMj);
+
+    var conceptKo = listKo('concept');
+    if (conceptKo.length) parts.push('건축적 개념: ' + conceptKo.join(', '));
+    var paletteKo = resolvedKo('palette');
+    if (paletteKo) parts.push('컬러: ' + paletteKo);
+    materialBulletsKo().forEach(function (b) { parts.push(b); });
+    var lightingKo = resolvedKo('lighting');
+    if (lightingKo) parts.push('조명: ' + lightingKo);
+
+    var designerKo = designerPromptKo();
+    if (designerKo) parts.push('레퍼런스 건축가: ' + designerKo);
+
+    if (sourceVal === 'plan' && planModeVal === 'full') parts.push('전체 조감도 시점 고정, 눈높이 외관 샷 아님');
+    else if (sourceVal === 'plan' && planModeVal === 'part') parts.push('표시된 부분에 대해서만 일관된 눈높이 시점으로 렌더링 (다른 부분 무시, 시점 임의 변경 금지)');
+    else if (sourceVal === 'plan') parts.push('도면과 일치하는 하나의 일관된 시점으로 렌더링 (시점 임의 변경 금지)');
+    else if (sourceVal === 'sketchup') parts.push('원본 스케치업 모델 뷰의 카메라 각도·화면 구도는 절대 변경하지 않음');
+    else if (sourceVal) parts.push('원본 사진의 카메라 각도·렌즈 시점은 절대 변경하지 않음');
+
+    if (sourceVal === 'plan') parts.push('도면에 그려진 조경 배치·담장/대문 위치·주차 공간·진입로를 그대로 유지 (임의 추가·삭제·이동 금지)');
+    else if (sourceVal === 'sketchup') parts.push('스케치업 모델에 이미 모델링된 매스·비례·개구부·지붕 형태를 그대로 유지 (형태 임의 변경 금지, 재질·색만 새로 입힘)');
+
+    if (objectActive()) parts.push(objectPhraseMjKo());
+
+    parts.push('화면 비율: ' + (state.aspect ? state.aspect.ratio + '(' + state.aspect.promptKo + ')' : '16:9(기본)'));
+    if (state.aspect && state.aspect.safe) parts.push('핵심 피사체는 가운데, 사방에 넉넉한 여백을 두어 잘려도 안전하게');
+
+    if (state.extra) parts.push('추가 요청: ' + state.extra);
+
+    return parts.join(' · ') + '\n\n(참고용 한글 번역입니다. 실제 미드저니 입력창에는 위쪽 영어 프롬프트를 사용하세요.)';
+  }
+
+  function buildConversationalEN(isNanoBanana) {
+    var typeEn = resolvedEn('buildingType') || '[select a building type]';
+    var styleEn = resolvedEn('style') || '[select a style]';
+    var sourceVal = state.source ? state.source.v : null;
+    var planModeVal = state.planMode ? state.planMode.v : null;
+    var renderStyleEn = renderStylePromptEn();
+    var isPhotoStyle = !renderStyleEn || (state.renderStyle && (state.renderStyle.v === 'photoreal' || state.renderStyle.v === 'ultraphoto'));
+    var objOnly = objectActive() && !sourceVal;
+
+    var intro;
+    if (sourceVal === 'plan' && planModeVal === 'full') {
+      intro = 'The attached image is a 2D architectural drawing (elevation / site plan) of this building. Based on the wall and roof structure, window/door positions, and the landscaping, fence/gate, parking, and driveway shown across the ENTIRE drawing,';
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      intro = 'The attached image is a 2D architectural drawing showing multiple facades or areas. Focus only on the single facade/portion that is marked or highlighted on the drawing (ignore all other areas), and based on that portion\'s structure,';
+    } else if (sourceVal === 'plan') {
+      intro = 'The attached image is a 2D architectural drawing of this building. Based on the wall structure, window/door positions, and site elements shown in the drawing,';
+    } else if (sourceVal === 'bare') {
+      intro = 'The attached photo shows this building exterior in its bare, under-construction state. Keep the window and door openings exactly as shown, and';
+    } else if (sourceVal === 'existing') {
+      if (isNanoBanana && !isPhotoStyle) {
+        intro = 'Use this photo only as a structural reference for the building\'s proportions, layout, and camera angle — do not preserve its photographic look or lighting. Keep the walls, windows, roofline, and site elements in the same relative positions, and';
+      } else if (isNanoBanana) {
+        intro = 'Edit this photo. Keep the building structure, windows, roofline, and site elements in their exact positions, and';
+      } else {
+        intro = 'The attached photo shows this existing building exterior. Keep the window, door, and roofline positions exactly as shown, and';
+      }
+    } else if (sourceVal === 'sketchup') {
+      intro = 'The attached image is a screenshot of a white, untextured SketchUp massing model of this building (no materials or colors applied yet). Keep the exact massing, proportions, window and door openings, and roof form as modeled, and';
+    } else if (objOnly) {
+      intro = 'Using the object described below purely as a design reference,';
+    } else {
+      intro = 'Based on the attached image,';
+    }
+
+    var lines = [];
+    var aspectLeadLineEn = aspectLeadEn();
+    if (aspectLeadLineEn) {
+      lines.push(aspectLeadLineEn);
+      lines.push('');
+    }
+    if (renderStyleEn) {
+      lines.push('STYLE (most important instruction — apply this to the entire output): ' + renderStyleEn);
+      lines.push('');
+    }
+
+    if (objOnly) {
+      lines.push(intro + " generate an exterior image of a new '" + typeEn + "' building in '" + styleEn + "' style, rendered as: " + (renderStyleEn || 'a photorealistic exterior photo') + '.');
+    } else if (sourceVal === 'plan' && planModeVal === 'full') {
+      lines.push(intro + " generate an aerial/bird's-eye view of the ENTIRE site plan — the whole building and site visible at once, walls and roof raised, keeping the landscaping, fence/gate, parking, and driveway already drawn on the plan, styled consistently in a '" + typeEn + '\'-anchored ' + styleEn + " scheme across the whole site, rendered as: " + (renderStyleEn || 'a photorealistic architectural visualization') + '.');
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      lines.push(intro + " generate a natural eye-level exterior view of only that marked facade/portion, remodeled as a '" + typeEn + "' in '" + styleEn + "' style, rendered as: " + (renderStyleEn || 'a photorealistic exterior photo') + '.');
+    } else if (renderStyleEn) {
+      lines.push(intro + " generate an image of this building remodeled as a '" + typeEn + "' in '" + styleEn + "' style, rendered as: " + renderStyleEn + '.');
+    } else {
+      lines.push(intro + " generate a photorealistic exterior photo of this building remodeled as a '" + typeEn + "' in '" + styleEn + "' style.");
+    }
+
+    lines.push('');
+    if (objOnly) {
+      // 사물 사진만 있을 때는 "원본 사진의 시점 유지" 지시가 맞지 않으므로 넣지 않는다
+    } else if (sourceVal === 'plan' && planModeVal === 'full') {
+      lines.push("IMPORTANT: Render from a single, consistent aerial/bird's-eye viewpoint showing the entire site at once. This is NOT an eye-level exterior photo of one facade.");
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      lines.push('IMPORTANT: Render from a single, consistent, natural eye-level viewpoint for ONLY the marked facade/portion. Ignore the rest of the drawing. Do not distort or reinterpret the layout of that portion.');
+    } else if (sourceVal === 'plan') {
+      lines.push('IMPORTANT: Render from a single, consistent, natural eye-level exterior viewpoint that matches the drawing. Do not distort or reinterpret the layout.');
+    } else if (sourceVal === 'sketchup') {
+      lines.push('IMPORTANT: Do not change the camera angle or viewpoint of the original SketchUp model screenshot under any circumstances — keep it exactly as captured.');
+    } else {
+      lines.push('IMPORTANT: Do not change the camera angle, lens perspective, or viewpoint of the original photo under any circumstances — keep it exactly as captured.');
+    }
+
+    if (sourceVal === 'plan') {
+      lines.push('IMPORTANT: Keep the landscaping, fence/gate position, parking spaces, and driveway exactly as drawn on the plan — do not add, remove, resize, or move any of these site elements from where they are shown.');
+    } else if (sourceVal === 'sketchup') {
+      lines.push('IMPORTANT: Keep the exact massing, proportions, window/door openings, and roof form as modeled in SketchUp — only add materials, color, texture, and surface detail; do not alter the geometry.');
+    }
+
+    if (objectActive()) {
+      lines.push('');
+      lines.push('OBJECT REFERENCE: ' + objectSentenceEn(!!sourceVal));
+    }
+
+    if (state.aspect && state.aspect.safe) {
+      lines.push('');
+      lines.push(SAFE_ZONE_EN);
+    }
+
+    var detailLines = [];
+    var conceptEn = listEn('concept');
+    if (conceptEn.length) detailLines.push('- Architectural concept: ' + conceptEn.join(', '));
+    var paletteEn = resolvedEn('palette');
+    if (paletteEn) detailLines.push('- Color palette: ' + paletteEn);
+    materialBulletsEn().forEach(function (b) { detailLines.push('- ' + b); });
+    var lightingEn = resolvedEn('lighting');
+    if (lightingEn) detailLines.push('- Lighting: ' + lightingEn);
+    var designerEn2 = designerPromptEn();
+    if (designerEn2) detailLines.push('- Reference architect / style influence: ' + designerEn2);
+    var renderStyleEn2 = resolvedEn('renderStyle');
+    if (renderStyleEn2) detailLines.push('- Rendering style: ' + renderStyleEn2);
+    if (state.extra) detailLines.push('- Additional request: ' + state.extra);
+
+    if (detailLines.length) {
+      lines.push('');
+      lines.push('Please incorporate:');
+      lines = lines.concat(detailLines);
+    }
+
+    lines.push('');
+    if (renderStyleEn) {
+      lines.push('Render the final result as ' + renderStyleEn + ', highly detailed and true to that medium.');
+    } else {
+      lines.push('Make the result look like a real, professionally photographed finished building — photorealistic and highly detailed.');
+    }
+
+    return lines.join('\n');
+  }
+
+  function buildConversationalKO(isNanoBanana) {
+    var typeKo = resolvedKo('buildingType') || '[건물 용도를 선택해 주세요]';
+    var styleKo = resolvedKo('style') || '[스타일을 선택해 주세요]';
+    var sourceVal = state.source ? state.source.v : null;
+    var planModeVal = state.planMode ? state.planMode.v : null;
+    var renderStyleKoLong = renderStylePromptKo();
+    var isPhotoStyleKo = !renderStyleKoLong || (state.renderStyle && (state.renderStyle.v === 'photoreal' || state.renderStyle.v === 'ultraphoto'));
+    var objOnlyKo = objectActive() && !sourceVal;
+
+    var intro;
+    if (sourceVal === 'plan' && planModeVal === 'full') {
+      intro = '첨부한 이미지는 이 건물의 2D 도면(입면도·배치도)이야. 도면 전체에 표시된 벽·지붕 구조와 창문·문 위치, 조경·담장/대문·주차·진입로를 기준으로,';
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      intro = '첨부한 이미지는 여러 파사드/영역이 있는 2D 도면이야. 도면에 표시(마킹)된 하나의 부분에만 집중하고 다른 부분은 무시한 채, 그 부분의 구조를 기준으로,';
+    } else if (sourceVal === 'plan') {
+      intro = '첨부한 이미지는 이 건물의 2D 도면이야. 도면에 표시된 벽 구조와 창문·문 위치, 대지 요소를 기준으로,';
+    } else if (sourceVal === 'bare') {
+      intro = '첨부한 사진은 골조/공사 중 상태의 건물 외부야. 창문·문의 위치는 그대로 유지한 채,';
+    } else if (sourceVal === 'existing') {
+      if (isNanoBanana && !isPhotoStyleKo) {
+        intro = '이 사진은 건물의 비례·배치·카메라 각도를 파악하기 위한 참고용으로만 사용하고, 사진의 사실적인 느낌이나 조명은 그대로 가져오지 마. 벽·창문·지붕선·대지 요소의 상대적 위치만 유지한 채,';
+      } else if (isNanoBanana) {
+        intro = '이 사진을 편집해줘. 건물 구조·창문·지붕선·대지 요소는 정확히 그대로 두고,';
+      } else {
+        intro = '첨부한 사진은 기존 건물 외부야. 창문·문·지붕선의 위치는 그대로 유지한 채,';
+      }
+    } else if (sourceVal === 'sketchup') {
+      intro = '첨부한 이미지는 이 건물의 흰색 무재질 스케치업 매싱 모델 스크린샷이야(아직 재질·색이 입혀지지 않음). 모델링된 매스·비례·개구부·지붕 형태는 정확히 그대로 유지한 채,';
+    } else if (objOnlyKo) {
+      intro = '아래에 설명한 사물을 디자인 참고용으로만 사용해서,';
+    } else {
+      intro = '첨부한 이미지를 기준으로,';
+    }
+
+    var renderStyleKoShort = resolvedKo('renderStyle');
+    var mediumPhraseKo = renderStyleKoShort || '사실적인 건축 외관 사진처럼';
+
+    var lines = [];
+    var aspectLeadLineKo = aspectLeadKo();
+    if (aspectLeadLineKo) {
+      lines.push(aspectLeadLineKo);
+      lines.push('');
+    }
+    if (renderStyleKoLong) {
+      lines.push('※ 가장 중요한 지시(전체 결과물에 적용): ' + renderStyleKoLong);
+      lines.push('');
+    }
+
+    if (objOnlyKo) {
+      lines.push(intro + ' ‘' + typeKo + '’ 용도의 ‘' + styleKo + '’ 스타일 새 건물의 외관 모습을 ' + mediumPhraseKo + ' 생성해줘.');
+    } else if (sourceVal === 'plan' && planModeVal === 'full') {
+      lines.push(intro + ' 대지 전체가 한눈에 보이는 조감도로, 도면에 그려진 조경·담장/대문·주차·진입로를 그대로 유지한 채 벽과 지붕을 세우고 ‘' + styleKo + '’ 스타일을 대지 전체에 일관되게 적용해서 ' + mediumPhraseKo + ' 생성해줘.');
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      lines.push(intro + ' 그 표시된 부분만 ‘' + typeKo + '’ 용도의 ‘' + styleKo + '’ 스타일로 리모델링한 눈높이 외관 모습을 ' + mediumPhraseKo + ' 생성해줘.');
+    } else {
+      lines.push(intro + ' 이 건물을 ‘' + typeKo + '’ 용도의 ‘' + styleKo + '’ 스타일로 리모델링한 모습을 ' + mediumPhraseKo + ' 생성해줘.');
+    }
+
+    lines.push('');
+    if (objOnlyKo) {
+      // 사물 사진만 있을 때는 "원본 사진의 시점 유지" 지시가 맞지 않으므로 넣지 않는다
+    } else if (sourceVal === 'plan' && planModeVal === 'full') {
+      lines.push('※ 중요: 대지 전체가 한 번에 보이는 조감 시점 하나로만 렌더링해줘. 파사드 하나만 보이는 눈높이 외관 사진이 되면 안 돼.');
+    } else if (sourceVal === 'plan' && planModeVal === 'part') {
+      lines.push('※ 중요: 표시된 부분 하나에 대해서만 자연스러운 눈높이 시점으로 렌더링하고, 도면의 다른 부분은 무시해줘. 그 부분의 구조나 배치를 임의로 바꾸지 마.');
+    } else if (sourceVal === 'plan') {
+      lines.push('※ 중요: 도면에 맞는 하나의 자연스러운 눈높이 시점으로만 렌더링하고, 구조나 배치를 임의로 바꾸지 마.');
+    } else if (sourceVal === 'sketchup') {
+      lines.push('※ 중요: 원본 스케치업 모델 스크린샷의 카메라 각도·화면 구도는 절대 바꾸지 마.');
+    } else {
+      lines.push('※ 중요: 원본 사진의 카메라 각도·렌즈 시점·구도는 어떤 경우에도 절대 바꾸지 말고 촬영된 그대로 유지해줘.');
+    }
+
+    if (sourceVal === 'plan') {
+      lines.push('※ 중요: 도면에 그려진 조경 배치, 담장·대문 위치, 주차 공간, 진입로를 그대로 유지해줘 — 도면에 있는 위치에서 임의로 추가하거나 빼거나 옮기지 마.');
+    } else if (sourceVal === 'sketchup') {
+      lines.push('※ 중요: 모델링된 매스·비례·개구부·지붕 형태는 그대로 유지하고, 재질·색·질감만 새로 입혀줘 — 형태 자체를 임의로 바꾸지 마.');
+    }
+
+    if (objectActive()) {
+      lines.push('');
+      lines.push('※ 사물 참고: ' + objectSentenceKo(!!sourceVal));
+    }
+
+    if (state.aspect && state.aspect.safe) {
+      lines.push('');
+      lines.push(SAFE_ZONE_KO);
+    }
+
+    var detailLines = [];
+    var conceptKo = listKo('concept');
+    if (conceptKo.length) detailLines.push('- 건축적 개념: ' + conceptKo.join(', '));
+    var paletteKo = resolvedKo('palette');
+    if (paletteKo) detailLines.push('- 컬러 팔레트: ' + paletteKo);
+    materialBulletsKo().forEach(function (b) { detailLines.push('- ' + b); });
+    var lightingKo = resolvedKo('lighting');
+    if (lightingKo) detailLines.push('- 조명: ' + lightingKo);
+    var designerKo2 = designerPromptKo();
+    if (designerKo2) detailLines.push('- 레퍼런스 건축가: ' + designerKo2);
+    var renderStyleKo2 = resolvedKo('renderStyle');
+    if (renderStyleKo2) detailLines.push('- 표현 기법: ' + renderStyleKo2);
+    if (state.extra) detailLines.push('- 추가 요청: ' + state.extra);
+
+    if (detailLines.length) {
+      lines.push('');
+      lines.push('반영할 요소:');
+      lines = lines.concat(detailLines);
+    }
+
+    lines.push('');
+    if (renderStyleKoLong) {
+      lines.push('※ 표현 기법 지시 (다시 한번 강조): ' + renderStyleKoLong);
+    } else {
+      lines.push('결과물은 실제 준공 후 촬영한 것처럼 사실적이고 디테일하게 표현해줘.');
+    }
+
+    return lines.join('\n');
+  }
+
+  var TOOL_META = {
+    mj: {
+      label: '미드저니',
+      note: 'Discord의 /imagine 창에 사진을 함께 첨부하거나, 이미지를 먼저 업로드해 받은 URL을 프롬프트 맨 앞 [PASTE IMAGE URL HERE] 자리에 붙여넣으세요.',
+      buildEn: buildMidjourneyEN,
+      buildKo: buildMidjourneyKO
+    },
+    gpt: {
+      label: '챗GPT',
+      note: '대화창에 원본 외관 사진(또는 도면)을 첨부한 뒤, 아래 영어 프롬프트를 그대로 붙여넣으세요.',
+      buildEn: function () { return buildConversationalEN(false); },
+      buildKo: function () { return buildConversationalKO(false); }
+    },
+    gem: {
+      label: '제미나이',
+      note: '제미나이(나노바나나)에 원본 외관 사진(또는 도면)을 첨부한 뒤, 아래 영어 프롬프트를 그대로 붙여넣으세요. 사진 편집 특성상 구조를 그대로 유지하도록 구성했습니다.',
+      buildEn: function () { return buildConversationalEN(true); },
+      buildKo: function () { return buildConversationalKO(true); }
+    }
+  };
+
+  // ---------- Render ----------
+  var promptCard = document.getElementById('promptCard');
+  var ticketPills = document.getElementById('ticketPills');
+
+  function render() {
+    // ticket
+    var pills = [];
+    if (state.source) pills.push(state.source.ko);
+    if (state.planMode) pills.push(state.planMode.ko);
+    var t = resolvedKo('buildingType'); if (t) pills.push(t);
+    var st = resolvedKo('style'); if (st) pills.push(st);
+    listKo('concept').forEach(function (v) { pills.push(v); });
+    var p = resolvedKo('palette'); if (p) pills.push(p);
+    ['wall', 'roof', 'window'].forEach(function (g) {
+      state.material[g].forEach(function (o) { pills.push(o.ko); });
+    });
+    var l = resolvedKo('lighting'); if (l) pills.push(l);
+    var rs = resolvedKo('renderStyle'); if (rs) pills.push(rs);
+    if (state.aspect) pills.push('비율 ' + state.aspect.ko);
+    if (objectActive()) pills.push('사물→건물' + (objectRef.desc ? ' · ' + objectRef.desc : ''));
+    var dz = resolvedKo('designer'); if (dz) pills.push(dz);
+
+    if (pills.length) {
+      ticketPills.innerHTML = pills.map(function (t) { return '<span class="pill">' + escapeHtml(t) + '</span>'; }).join('');
+    } else {
+      ticketPills.innerHTML = '<span class="ticket-empty">아직 선택한 항목이 없습니다</span>';
+    }
+
+    // prompt card
+    var meta = TOOL_META[activeTool];
+    var textEn = meta.buildEn();
+    var textKo = meta.buildKo();
+    promptCard.innerHTML =
+      '<h3>' + meta.label + '용 프롬프트 (English)</h3>' +
+      '<p class="tool-note">' + meta.note + '</p>' +
+      '<textarea class="prompt-output" id="promptOutputEn" spellcheck="false">' + escapeHtml(textEn) + '</textarea>' +
+      '<div class="prompt-actions"><button class="copy-btn" id="copyBtnEn" type="button">영어 프롬프트 복사</button></div>' +
+      '<div class="translation-block">' +
+        '<h4>한글 번역 <span class="translation-hint">참고용 — 실제 입력은 위 영어 프롬프트를 사용하세요</span></h4>' +
+        '<textarea class="prompt-output translation" id="promptOutputKo" spellcheck="false">' + escapeHtml(textKo) + '</textarea>' +
+        '<div class="prompt-actions"><button class="copy-btn secondary" id="copyBtnKo" type="button">한글 번역 복사</button></div>' +
+      '</div>' +
+      '<div class="tip-box"><b>Tip.</b> 건물 용도·스타일만 선택해도 프롬프트가 만들어져요. 나머지 항목은 선택할수록 결과가 더 구체적이고 정교해집니다.</div>';
+
+    document.getElementById('copyBtnEn').addEventListener('click', function () {
+      copyText(document.getElementById('promptOutputEn').value, this, '영어 프롬프트 복사');
+    });
+    document.getElementById('copyBtnKo').addEventListener('click', function () {
+      copyText(document.getElementById('promptOutputKo').value, this, '한글 번역 복사');
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function copyText(text, btn, originalLabel) {
+    var done = function () {
+      btn.textContent = '복사됨!';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = originalLabel; btn.classList.remove('copied'); }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function fallbackCopy(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    done();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
